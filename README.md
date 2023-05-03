@@ -5,9 +5,9 @@
 </div>
 
 
-<div style="text-align: right">  국립농업과학원 농업미생물과 </div>
+<div align="right">국립농업과학원 농업미생물과</div>
 
-<div style="text-align: right"> 조경준 </div>
+<div align="right">조경준</div>
 
 <br>
 
@@ -32,8 +32,9 @@
 
 <div align="center">
 
-<h3><span style="color:red">주의사항</span></h3>
-<p style="color:red">이 장소는 웹에 오픈되어 있습니다. 보안에 직접적으로 연관된 자료를 공유해서는 안됩니다.</p>
+<h3><font color="red">이슈 게시판 이용 시 주의사항</font></h3>
+<p><font color="red">이 장소는 웹에 오픈되어 있습니다. 보안에 직접적으로 연관된 자료를 공유해서는 안됩니다.</font></p>
+
 
 </div>
 
@@ -47,10 +48,10 @@
 
 ### 5월
 
-[1주차 : R, Rstudio 설치 (Windows 10 이상 기준)](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)
-2주차
-3주차
-4주차
+[1주차 : R, Rstudio 설치 (Windows 10 이상 기준)](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)  
+2주차  
+3주차  
+4주차  
 
 <br>
 
