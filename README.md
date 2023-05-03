@@ -1,6 +1,6 @@
-<div style="text-align: center">
+<div align="center"> 
 
-# 23년도 국립농업과학원 바이오인포메틱스 연구회 <br> R 자료실
+<h1> 23년도 국립농업과학원 바이오인포메틱스 연구회 <br> R 자료실 </h1> 
 
 </div>
 
@@ -30,17 +30,12 @@
 
 ------
 
-<span style="color:red">
+<div align="center">
 
-<div style="text-align: center">
-
-### 주의사항
-
-이 장소는 웹에 오픈되어 있습니다. 보안에 직접적으로 연관된 자료를 공유해서는 안됩니다.
+<h3><span style="color:red">주의사항</span></h3>
+<p style="color:red">이 장소는 웹에 오픈되어 있습니다. 보안에 직접적으로 연관된 자료를 공유해서는 안됩니다.</p>
 
 </div>
-
-</span>
 
 ------
 
