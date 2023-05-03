@@ -1,6 +1,6 @@
 <div style="text-align: center">
 
-# 23년도 국립농업과학원 바이오인포메틱스 연구회 R 자료실
+# 23년도 국립농업과학원 바이오인포메틱스 연구회 <br> R 자료실
 
 </div>
 
@@ -52,7 +52,7 @@
 
 ### 5월
 
-1. [1주차 : R, Rstudio 설치 Windows 10 이상 기준](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)
+1. [1주차 : R, Rstudio 설치 (Windows 10 이상 기준)](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)
 2. 2주차
 3. 3주차
 4. 4주차
