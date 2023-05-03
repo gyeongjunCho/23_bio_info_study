@@ -52,10 +52,10 @@
 
 ### 5월
 
-1. [1주차 : R, Rstudio 설치 (Windows 10 이상 기준)](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)
-2. 2주차
-3. 3주차
-4. 4주차
+[1주차 : R, Rstudio 설치 (Windows 10 이상 기준)](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)
+2주차
+3주차
+4주차
 
 <br>
 
