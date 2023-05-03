@@ -105,7 +105,7 @@
 
     R만 설치하면 무슨 70~80 년대 영화에서나 나올 법한 검은창에서 작업을 해야 됩니다. 그래서 사용하기 편하도록 기능들을 추가하는 Rstudio를 설치 해봅시다.
 
-  1. Rstudio를 개발하는 [Posit 다운로드 페이지](https://posit.co/downloads/)에 방문하여  **Rstudio-desktop free** 버전을 다운로드 받습니다.
+  1. Rstudio를 개발하는 [Posit 다운로드 페이지](https://posit.co/downloads/)에 방문하여 **Rstudio-desktop free** 버전을 다운로드 받습니다.
         * Rstudio-desktop **free** 파란색 버튼 클릭 
         * **DOWNLOAD RSTUDIO DESKTOP FOR WINDOWS** 파란색 버튼 클릭
 
