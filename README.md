@@ -81,7 +81,7 @@
 
         <br>
 
-   ><div style="text-align: center"> -- 토막상식 -- </div>  
+   ><div align="center"> -- 토막상식 -- </div>  
    ><br>
    >
    >요즘은 대부분 버전을 **A.B.C**으로 표기하는데  
