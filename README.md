@@ -355,7 +355,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
       
       순서있는 글자, factor로 구성되는 vector는 `c()`로 벡터를 만든 후 `factor()`로 순서(levels)를 지정하여 만들수 있습니다.
         ~~~ R
-        요일 <- c("월", "화", "수", "목", "금")>
+        요일 <- c("월", "화", "수", "목", "금")
         요일 <- factor(요일,  level= c("월", "화", "수", "목", "금"))
         요일
         ~~~
@@ -426,8 +426,59 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
         ~~~
 
   4. 엑셀 이용 시 data.frame 구조를 염두할 것
-     여기까지 살펴보면 엑셀로 저장했다가, data.frame으로 전환하여 사용할때 열(세로열, column)로 정리를 해야 데이터 유형에 맞게 정리 할 수 있음을 알수 있습니다. (데이터가 많아지면 위아래로 긴 형태가 되겠죠)
-     
+     여기까지 살펴보면 엑셀로 저장했다가, data.frame으로 전환하여 사용할때 열(세로열, column)별로 정리를 해야 데이터 유형에 맞게 정리 할 수 있음을 알수 있습니다. (데이터가 많아지면 위아래로 긴 형태가 되겠죠)
+
+      <table>
+      <tr>
+        <td>요일</td>
+        <td>과일</td>
+        <td>개수</td>
+        <td>맛있음</td>
+      </tr>
+      <tr>
+        <td>월</td>
+        <td>사과</td>
+        <td>2</td>
+        <td>TRUE</td>
+      </tr>
+      <tr>
+        <td>화</td>
+        <td>바나나</td>
+        <td>4</td>
+        <td>TRUE</td>
+      </tr>
+      <tr>
+        <td>수</td>
+        <td>두리안</td>
+        <td>5</td>
+        <td>FALSE</td>
+      </tr>
+      <tr>
+        <td>목</td>
+        <td>망고</td>
+        <td>12</td>
+        <td>TRUE</td>
+      </tr>
+      <tr>
+        <td>금</td>
+        <td>포도</td>
+        <td>24</td>
+        <td>TRUE</td>
+      </tr>
+      <tr>
+        <td>토</td>
+        <td>복숭아</td>
+        <td>2</td>
+        <td>TRUE</td>
+      </tr>
+      <tr>
+        <td>일</td>
+        <td>자두</td>
+        <td>10</td>
+        <td>TRUE</td>
+      </tr>
+      </table>
+
      그리고 엑셀은 마이크로소프트 사가 만든 스프레드시트 프로그램이라 전용 읽기 프로그램 또는 쓰기 프로그램이랑 호환이 됩니다. 때문에 xlsx, xls 확장자로 저장하시되, R로 전환하고 싶은 파일의 sheet만 csv(Comma Separated Values)로 저장하면 됩니다. 
      ><div align="center"> -- csv 파일 저장 방법 -- </div>  
      ><br> 
