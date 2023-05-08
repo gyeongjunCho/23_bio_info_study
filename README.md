@@ -376,7 +376,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
         요일.char <- as.charactor(요일) # charactor로 강제변환
         요일.char 
         order(요일) # factor라서 요일 월화수목금을 1 2 3 4 5 순으로 인식
-        order(요일.char) # 요일 월화수목금을 글자순서인 5(금) 4(목) 3(수) 1(월) 2(화) 
+        order(요일.char) # 요일 월화수목금을 한글순서인 5(금) 4(목) 3(수) 1(월) 2(화) 
 
         개수.char <- as.charactor(개수) #charactor로의 강제변환
         개수.char
