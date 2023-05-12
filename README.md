@@ -657,7 +657,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
   
   https://learninginnovation.duke.edu/wp-content/uploads/2020/07/R_ggplot2_cheatsheet.pdf
 
-  위 주소는 ggplot2 다양한 함수를 포스터 형식으로 정리한 [**ggplot2 치팅시트**](https://learninginnovation.duke.edu/wp-content/uploads/2020/07/R_ggplot2_cheatsheet.pdf) 입니다.
+  위 주소는 ggplot2 다양한 함수를 포스터 형식으로 정리한 [**ggplot2 치트시트**](https://learninginnovation.duke.edu/wp-content/uploads/2020/07/R_ggplot2_cheatsheet.pdf) 입니다.
 
   이제 연습하시고 체득하시면 되요. (다시 어느정도 R 지식이 더 쌓이면 ggplot2 심화과정을 한번더 하겠습니다.)
   
