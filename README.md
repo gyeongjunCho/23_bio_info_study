@@ -50,7 +50,7 @@
 
 [1주차 : R, Rstudio 설치 (Windows 10 이상 기준)](#5월-1주차--r-rstudio-설치-windows-10-이상-기준)  
 [2주차 : R 데이터의 종류, 엑셀에 정리하는 방법](#5월-2주차--r-데이터의-종류-엑셀에-정리하는-방법)  
-3주차  
+[3주차 : 함수, 그래프 그려보기](#5월-3주차-함수-그래프-그리기)  
 4주차  
 
 <br>
@@ -397,7 +397,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
 
         으로 표기됩니다. 두개의 차이점이 보이시나요? **nummeric**은 따옴표 없이 출력되고, **charactor**는 따옴표로 출력이 됩니다.
 
-  3. data.frame 만들기
+  3. data.frame 만들기  
      data.frame은 길이가 같은 벡터들을 세로로 정렬해서 만들수 있습니다.
 
         ~~~ R
@@ -414,7 +414,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
         df$개수
         ~~~
 
-      벡터인지 data.frame인지 확인하는 함수는 `is.vector()`, `is.data.frame`함수가 있습니다.
+      벡터인지 data.frame인지 확인하는 함수는 `is.vector()`, `is.data.frame()`함수가 있습니다.
         ~~~ R
         is.data.frame(df)       # TRUE 반환
         is.data.frame(df$요일)   # FALSE 반환
@@ -425,7 +425,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
         is.vector(df$개수)       # TRUE 반환
         ~~~
 
-  4. 엑셀 이용 시 data.frame 구조를 염두할 것
+  4. 엑셀 이용 시 data.frame 구조를 염두할 것  
      여기까지 살펴보면 엑셀로 저장했다가, data.frame으로 전환하여 사용할때 열(세로열, column)별로 정리를 해야 데이터 유형에 맞게 정리 할 수 있음을 알수 있습니다. (데이터가 많아지면 위아래로 긴 형태가 되겠죠)
 
       <table>
@@ -505,3 +505,186 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
 다음주는 오늘 만든 data.frame으로  ggplot을 통해 그래프 그리는 것을 해 보겠습니다.
 
 ------
+
+### 5월 3주차 함수, 그래프 그리기
+
+#### R에서 함수란?
+
+- 중고등학교에서 배운 함수랑 비슷
+
+  조금 옛날 기억을 꺼내볼까요?
+
+  $$
+  f(x, y) = x+2 \times y
+  $$
+
+  함수 $f$ 이걸 볼까요?
+  $x$와 $y$는 아무 숫자나 들어갈수 있는 변수라고 합시다. 
+
+  $$x = 2$$ $$y = 4$$일때$$f(2, 4) = 2 + 2 \times 4$$ 가 되서 
+  결과는 $$10$$이 출력 됩니다.
+  
+  이걸 R로 표현 하면
+
+  ~~~
+  # 먼저 함수를 정의해 줍니다.
+  F <- function(x, y){
+        x + 2y 
+     }
+
+  # 위 R코드 구조: '함수이름' <- function('변수1', '변수2'... '변수n'){'변수들로 원하는 기능 설명'}
+  ~~~
+  
+  F라는 함수를 정의했습니다. 
+  이제 x와 y에 값을 마음데로 바꿔 볼까요?
+
+  ~~~
+  F(x=2, y=4)
+  F(x=3, y=24)
+  ~~~
+  
+  축하드립니다. 당신은 처음으로 F라고 불리는
+  $x$, $y$ 두 숫자를 넣으면 자동으로 $x+ 2y$
+  계산 하는 프로그램(함수)을 만들었어요.
+
+  함수이름은 내맘데로 정의하면 됩니다. 
+  숫자로 시작하지 않고 띄어쓰기 없이 지으면 되요.
+
+  ~~~
+  my_original_program <- function(x, y){ x + 2y }
+  my_orogianl_program(x=2, y=21) # 2+42 = 44
+  ~~~
+
+  내친김에 직각삼각형의 직교하는 두 변의 길이로
+  대각선을 계산하는 프로그램을 만들어 봅시다.
+
+  ~~~
+  pitagoras <- function(x, y){
+
+   # 직각삼각형의 대각선길이의 제곱을 A 저장
+    A <- x^2+y^2
+
+   # A에 0.5제곱(루트)을 L에 저장  
+    L <- A^0.5
+   
+   # 중간에 보여줄 값은 print()함수를 씁니다.
+    print("직각 삼각형의 대각선의 길이는")
+
+   # 보여줄 출력할 최종값을 정할때 return()함수를 씁니다. 
+    return(L)
+
+  }
+
+  pitagoras(x=3, y=4)
+
+  pitagoras(x=pi, y=2pi) # 원주율 3.14159...를 R에선 pi로 표기합니다.  
+  ~~~
+
+  이정도만 되어도 현상을 수학적으로 이해하고 R로 표현 할 수 있으면, 답을 도출하는 프로그램을 만드실 수가 있습니다.
+
+
+#### 그래프 그려보기
+
+- 함수와 그래프 패키지 `ggplot2`와의 관계
+ 
+    왜 그래프를 그려보기 전에 함수를 만드는 방법을 배운 이유는....
+  
+    R에서 그래프에관한 `ggplot2`이라는 패키지가 유명한데요, 다른사람이 만든 함수다 라고 생각하면 이해하기 편해서 그래요.
+    모든 R 패키지는 남들이 만들어 놓은 함수를 내가 다운받아 쓰는 개념 입니다.
+
+    이제 그래프를 그려보겠습니다. 저번주에 못오신 분들을 위해 한번에 data.frame `df`를 만들어 볼게요.
+
+    저번주에 `df`를 만드신게 남아 있으면 하실 필요 없어요.
+
+  ~~~ R
+  df <-
+    data.frame(
+      요일 = c("월","화", "수", "목", "금"),
+      과일 = c("사과", "바나나", "두리안", "망고", "포도"),
+      개수 = c(2, 4, 5, 12, 24)
+    )
+  ~~~
+
+- 그래프 그리기
+  이제 R에서 그래프를 그리는 함수를 써볼게요.
+  우선 패키지 기능을 불러옵니다. 
+  ~~~
+  library(ggplot2)
+  ~~~
+  
+  ggplot 함수를 써봅시다.
+   
+  구조: ggplot(data=데이터프레임, mapping = aes(x=변수1, y=변수2, ...))
+  이런식으로 이루어 지는데요.
+
+  data.frame은 벡터가 세로로 합쳐진거 라는거 기억하시죠? 벡터를 지정하는 col.names (열 이름)을 아래처럼 각 변수로 쓰시면 됩니다.
+
+  ~~~
+  ggplot(data=df, mapping = aes(x = 요일, y= 개수, color = 과일))
+  ~~~
+
+  자 그러면 축은 다 설정 했지만 뭔가 많이 썰렁하죠? 
+  위 R코드는 **그래프를 그릴때 data는 df를 쓰고, 축은 x=요일, y=개수, color= 과일로 설정하겠다**
+  라는 내용의 함수입니다.
+  
+  여기에 어떤 기하학적(geometric) 표현을 할건지 지정만 해주면 됩니다. 먼저 점그래프를 그려볼게요.
+
+  ~~~
+  ggplot(data=df, mapping = aes(x = 요일, y= 개수, color = 과일))+
+   # 기하학적으로 점으로 그리는 함수
+    geom_point()
+  ~~~
+
+  +를 쓴 뒤에는 투명한 비닐을 하나 씌우고 그 위에 다음 함수 그림을 그린다 생각하면 이해하기 편해요.
+
+  ~~~
+  ggplot(data=df, mapping = aes(x = 요일, y= 개수, color = 과일))+
+    geom_point()+
+
+   # 라벨 입력하기, 위에 정의한 축내용 덮어씌우기, 배경없이 하려면 geom_text
+    geom_label(mapping = aes(label=과일, y=개수+1)) 
+  ~~~
+  
+  ~~~
+  ggplot(data=df, mapping = aes(x = 요일, y= 개수, color = 과일))+
+    geom_point()+
+    geom_label(mapping = aes(label=과일, y=개수+1))+
+   # alpha는 불투명도
+    geom_bar(stat = "identity", aes(fill=과일), alpha = 0.3)
+    ~~~
+
+  이제 ggplot2에서 핵심적인 내용은 다 배우신겁니다.
+  
+  https://learninginnovation.duke.edu/wp-content/uploads/2020/07/R_ggplot2_cheatsheet.pdf
+
+  위 주소는 ggplot2 다양한 함수를 포스터 형식으로 정리한 [**ggplot2 치팅시트**](https://learninginnovation.duke.edu/wp-content/uploads/2020/07/R_ggplot2_cheatsheet.pdf) 입니다.
+
+  이제 연습하시고 체득하시면 되요. (다시 어느정도 R 지식이 더 쌓이면 ggplot2 심화과정을 한번더 하겠습니다.)
+  
+  추천하는 R그래프 책은 표지에 사슴?이 그려져 있는 [**R graphics cookbook**](https://search.shopping.naver.com/book/catalog/32445547585?query=R%20%EA%B7%B8%EB%9E%98%ED%94%BD%20cookbook&NaPm=ct%3Dlhk6cins%7Cci%3D90651577772e509960b217dccdeaf3bcf6ac17d0%7Ctr%3Dboksl%7Csn%3D95694%7Chk%3Ddf3e52db6b57c8b23ad2d658aa74735e525a40c4) 입니다.
+
+  직접 자기 데이터로만 써도 되고
+  R에는 연습용으로 다양한 data.frame이 내장 되어 있습니다.
+  대표적으로는 `iris`가 있죠.
+
+  ~~~
+  iris
+  head(iris)
+  ~~~
+  
+  데이터가 많기때문에 colname을 파악하기 힘듭니다. 이럴땐 `head()` 함수를 쓰면 맨위 5행(가로)만 보여주기 때문에 데이터 특징을 파악하기 편해요.
+
+  이걸로 그래프를 그려볼게요.
+
+  ~~~
+  ggplot(data = iris, 
+         mapping = aes(x=Species, y=Sepal.Width))+
+    stat_summary(geom="bar", fun.data="mean_se")+
+    stat_summary(geom="errorbar", fun.data="mean_se", width=0.5)+
+    geom_jitter()
+  ~~~
+
+  여기서 stat_summary는 평균과 표준오차와 같은 계산후에 그리는 방법입니다.
+
+  이것으로 그래프 그리는것을 마치겠습니다.
+  다음에는 글자 데이터를 다루는 방법, 논리연산자에 대하여 배우겠습니다.
