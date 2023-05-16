@@ -649,8 +649,10 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
   ggplot(data=df, mapping = aes(x = 요일, y= 개수, color = 과일))+
     geom_point()+
     geom_label(mapping = aes(label=과일, y=개수+1))+
+   
    # alpha는 불투명도
-    geom_bar(stat = "identity", aes(fill=과일), alpha = 0.3)
+    geom_bar(stat = "identity", 
+             mapping = aes(fill=과일), alpha = 0.3)
     ~~~
 
   이제 ggplot2에서 핵심적인 내용은 다 배우신겁니다.
@@ -665,6 +667,11 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
 
   직접 자기 데이터로만 써도 되고
   R에는 연습용으로 다양한 data.frame이 내장 되어 있습니다.
+  
+  ~~~
+  data() # R 연습용 내장 data.frame 목록 보기
+  ~~~
+
   대표적으로는 `iris`가 있죠.
 
   ~~~
@@ -684,7 +691,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
     geom_jitter()
   ~~~
 
-  여기서 stat_summary는 평균과 표준오차와 같은 계산후에 그리는 방법입니다.
+  여기서 stat_summary는 평균과 표준오차와 같은 것을 계산하면서 그리는 방법입니다.
 
   이것으로 그래프 그리는것을 마치겠습니다.
   다음에는 글자 데이터를 다루는 방법, 논리연산자에 대하여 배우겠습니다.
