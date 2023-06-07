@@ -161,7 +161,7 @@
   </tr>
   <tr>
     <td rowspan="2">글자</td>
-    <td>charactor</td>
+    <td>character</td>
     <td>순서가 없는 글자 데이터<br>정렬 될 때 알파벳 순으로 나열됨</td>
   </tr>
   <tr>
@@ -366,26 +366,26 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
      만약 데이터 유형을 확인할 필요가 있다면
 
         ~~~ R
-        class(개수) # charactor 반환
+        class(개수) # character 반환
         ~~~
 
-     `class()` 함수는 안에 들어가는 내용이 벡터일때, `charactor`, `nummeric`, `logical` 인지 데이터 유형을 알려줍니다.
+     `class()` 함수는 안에 들어가는 내용이 벡터일때, `character`, `nummeric`, `logical` 인지 데이터 유형을 알려줍니다.
 
-     글자로 강제변환을 할 일이 생기면 `as.charactor`를 쓰면 됩니다.
+     글자로 강제변환을 할 일이 생기면 `as.character`를 쓰면 됩니다.
      이 외에도 `as.logical`, `as.nummeric` 등이 있습니다.
 
         ~~~ R
-        요일.char <- as.charactor(요일) # charactor로 강제변환
+        요일.char <- as.character(요일) # character로 강제변환
         요일.char 
         order(요일) # factor라서 요일 월화수목금을 1 2 3 4 5 순으로 인식
         order(요일.char) # 요일 월화수목금을 한글순서인 5(금) 4(목) 3(수) 1(월) 2(화) 
 
-        개수.char <- as.charactor(개수) #charactor로의 강제변환
+        개수.char <- as.character(개수) #character로의 강제변환
         개수.char
         ~~~
      
      여기까지 따라한 출력 결과를 보면  
-     charactor는
+     character는
 
         ~~~ R
         [1] "2" "4" "5" "12" "24"
@@ -397,7 +397,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
         [1] 2 4 5 12 24
         ~~~
 
-        으로 표기됩니다. 두개의 차이점이 보이시나요? **nummeric**은 따옴표 없이 출력되고, **charactor**는 따옴표로 출력이 됩니다.
+        으로 표기됩니다. 두개의 차이점이 보이시나요? **nummeric**은 따옴표 없이 출력되고, **character**는 따옴표로 출력이 됩니다.
 
   3. data.frame 만들기  
      data.frame은 길이가 같은 벡터들을 세로로 정렬해서 만들수 있습니다.
@@ -547,7 +547,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
   ~~~
   # 먼저 함수를 정의해 줍니다.
   F <- function(x, y){
-        x + 2y 
+        x + 2*y 
      }
 
   # 위 R코드 구조: '함수이름' <- function('변수1', '변수2'... '변수n'){'변수들로 원하는 기능 설명'}
@@ -562,14 +562,14 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
   ~~~
   
   축하드립니다. 당신은 처음으로 F라고 불리는
-  $x$, $y$ 두 숫자를 넣으면 자동으로 $x+ 2y$
+  $x$, $y$ 두 숫자를 넣으면 자동으로 $x+ 2*y$
   계산 하는 프로그램(함수)을 만들었어요.
 
   함수이름은 내맘데로 정의하면 됩니다. 
   숫자로 시작하지 않고 띄어쓰기 없이 지으면 되요.
 
   ~~~
-  my_original_program <- function(x, y){ x + 2y }
+  my_original_program <- function(x, y){ x + 2*y }
   my_orogianl_program(x=2, y=21) # 2+42 = 44
   ~~~
 
@@ -912,7 +912,7 @@ R의 데이터 구조의 특징은 data.frame이라고 볼 수 있습니다. 대
     }
   
     full_length <- nchar(dna)
-    gc <- gsub("[CG]", "", dna)
+    gc <- gsub("[^GC]", "", dna)
 
     gc_length <- nchar(gc)
 
