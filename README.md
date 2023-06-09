@@ -1155,7 +1155,7 @@ phylum
  
   <br>
 
-  $ \cfrac {A} {B} \times 100 $ 
+  $ {A \over B} \times 100 $ 
 
   </div>
 
