@@ -54,6 +54,7 @@
 ### 6월
 [1주차 : 글자데이터 다루기](#6월-1주차--글자-데이터-다루기)
 [2주차 : 숫자관련 연산자, 데이터구조](#6월-2주차-숫자관련-연산자-데이터-구조)
+[3주차 : (복습) data.frame 다루고 그래프 그리기](#6월-3주차-복습dataframe-다루고-그래프-그리기)
 
 <br>
 
@@ -1124,3 +1125,286 @@ print(df)
     ```
     
     여기까지 4주 동안 R에서 제가 연구에 자주 활용했던 내용 중에서, R의 기초적인 규칙에 대하여 알아보았습니다. 한 동안은 익숙해질 때까지 몇번더 지금까지 내용들을 복습하겠습니다. 다음주는 제일 중요한 첫 모임 내용(데이터 유형과 구조의 종류)으로 부터 시작하고, 다시 해보거나 알려줬으면 하는 내용을 6월 9일 저녁까지 제 개인 카톡으로 남겨주세요. 많은 문의가 온 내용 중심으로 복습 강의 내용을 구성해 보겠습니다.
+
+    ------
+
+### 6월 3주차: (복습)data.frame 다루고 그래프 그리기
+
+#### 실제 데이터 불러오기
+
+제가 논문에서 실제로 쓴 데이터의 일부 입니다. 어떤 식물의 근권의 진균에 대한 마이크로바이옴을 조사했죠.
+한번 불러와 봅시다.
+
+``` r
+phylum <- read.csv("phylum")
+phylum
+```
+
+진균에 대한 메타게놈을 진행한뒤 각 염기서열 read 수를 phylum 별로 정리한 데이터 입니다. 여기서 오늘 relative abundance를 구하고 그래프를 구하는 작업을 같이 진행해 봅시다. 
+
+<br>
+
+#### Relative abundance 구하는 함수 만들기
+
+  Relatie abundance (%)에 대한 수식을 볼까요?
+
+  <div align="center">
+
+  $relative~abundance(\%)=\cfrac {한~종류의~미생물량}{한~샘플내~총~미생물량} \times 100$
+
+  </div>
+
+  이제 만약 4가지의 종류의 미생물의 양이 1, 2, 2, 5 순으로 있다고 칩시다.
+  벡터로 나타내고 이걸 `x`로 저장해 볼게요.
+
+  ``` r
+  x <- c(1, 2, 2, 5) 
+  ```
+
+  x 벡터의 계산에서 특징을 생각해 봅시다. 우선 함수 `sum()`을 사용하면 한 벡터내에 있는 숫자의 합이 계산됩니다.
+
+  ``` r
+  sum(x) # 답 : 10
+  ```
+  10으로 계산되죠? 그러면 벡터의 특징중에서 긴벡터에 맞추어서 짧은 벡터가 반복된다는 점을 상기하면서 다음 입력을 해봅시다.
+
+  ``` r
+  x/10 # 벡터 0.1, 0.2, 0.2, 0.5 가 출력됩니다.
+  ```
+
+  그럼 두개를 조합하면 아래처럼 쓸수 있겠죠?
+
+  ``` r
+  x/sum(x)
+  ```
+
+  그럼 저기다 곱하기 100을 하면 다음과 같이 함수를 만들 수 있습니다.
+
+  ``` r
+  rel_abundancing <- function(x){
+    x/sum(x)*100
+  }
+  ```
+
+  그럼 사용해 봐야 겠죠??
+
+  ``` r
+  rel_abundancing(x)
+
+  x2 <- c(12,315,121,12,1,21)
+  rel_abundancing(x2)
+  ```
+
+  <br>
+
+#### 실제 데이터에 적용해 보기
+
+  우선 데이터 구조부터 상세히 봅시다.
+  ``` r
+  phylum 
+  ```
+  각 Phylum 이름 column이 `phylum[, 1]`에 해당하는 위치에 있고. `A1 A2 A3 B1 B2 B3 ...`에 해당하는 column은 A사이트에 반복 1, 2, 3; B 사이트에 반복 1, 2, 3에 해당하는 진균의 양을 나타냅니다. 샘플이 총 11 사이트 3반복이라 33개에 해당 됩니다. phylum 이름을 제외한 샘플만 R 코드로 나타내면...
+
+  ``` r
+  phylum[, 2] # 첫번째 phylum[, 1] 은 진균의 phylum 이름에 대한 정보...
+  phylum[, 3]
+  phylum[, 4]
+  phylum[, 5]
+  phylum[, 6]
+  phylum[, 7]
+  phylum[, 8]
+  phylum[, 9]
+  phylum[, 10]
+  phylum[, 11]
+  phylum[, 12]
+  phylum[, 13]
+  # 계속한다면 맨 마지막엔...
+  phylum[, 34]
+  ```
+
+  이렇게 나타 낼수 있습니다. 이걸 일일이 우리가 만든 `rel_abundancing()` 함수를 적용하면 되죠.
+
+  ``` r
+  phylum[, 2] <- rel_abundancing(phylum[, 2])
+  phylum[, 3] <- rel_abundancing(phylum[, 3])
+  phylum[, 4] <- rel_abundancing(phylum[, 4])
+  phylum[, 5] <- rel_abundancing(phylum[, 5])
+  ```
+  이걸 34까지 쓰려면 너무 기계적으로 비효율 적입니다. 여기서 잠깐 **반복문**을 배워볼게요.
+
+  ```
+  alphabet <- c(LETTERS, letters)
+  alphabet
+
+  for(i in alphabet){
+    print(i)
+  }
+  ```
+  
+  `c(LETTERS, letters)`는 영어 대소문자 알파벳을 벡터로 만들어준 다음 `alphabet`이라는 이름으로 저장을 해 줬습니다.  
+  그 다음 `for()` 함수 안에 `i in alphabet` 라고 썻는데 이건 다음 **중괄호**안에 들어간 일련의 작업들에서 `alphabet` 벡터에 들어간 요소 순서대로 `i`를 대신하여....
+
+   <div align="center">
+
+  `i` 가 `"A"`일때 작업을 하고  
+  위 작업이 끝나면 다시 처음으로 돌아가서  
+  `i` 가 `"B"` 일때 작업을 하고  
+  끝나면 다시 `i`가 `"C"`일때 작업을 하고   
+  ... 
+  ...   
+  맨마지막으로 `i`가 `"z"`일때 작업을 해라
+
+   </div>
+
+  라는 반복작업을 하게 됩니다. 이런걸 반본문이라고 하는데요, 반복문을 잘 활용하면 반복작업들이 많이 편해집니다.
+
+  그럼 이걸 phylum 작업에 적용해 볼까요?
+
+  ``` r
+  phylum[, 2] <- rel_abundancing(phylum[, 2])
+  phylum[, 3] <- rel_abundancing(phylum[, 3])
+  phylum[, 4] <- rel_abundancing(phylum[, 4])
+  phylum[, 5] <- rel_abundancing(phylum[, 5])
+  phylum[, 6] <- rel_abundancing(phylum[, 6])
+  phylum[, 7] <- rel_abundancing(phylum[, 7])
+  phylum[, 8] <- rel_abundancing(phylum[, 8])
+  phylum[, 9] <- rel_abundancing(phylum[, 9])
+  # ... 생략
+  phylum[, 34] <- rel_abundancing(phylum[, 34])
+  ```
+
+  이였으니까 반복되는 부분 제외하고 변화하는 부분만 i로 바꾸면 아래처럼 표현됩니다.
+
+  ```
+  phylum[, i] <- rel_abundancing(phylum[, i])
+  ```
+
+  여기서 i만 2부터 34까지만 바꿔서 작업하면 되겠죠?
+  아래처럼 말이죠.
+
+  ``` r
+  for(i in 2:34){
+    phylum[, i] <- rel_abundancing(phylum[, i])
+  }
+
+  phylum
+  ```
+
+  33줄이나 써야 할 게 2~3줄로 확 줄었습니다.
+
+  그러나 한가지 문제점이 있습니다. 데이터가 ggplot2를 사용하기엔 위아래로 긴 형태의 데이터가 아닌 거죠. x축, y축, color축 등을 colname(열이름) 으로 지정해 줄 수가 없습니다. 이건 `reshape`패키지의 `melt()` 함수를 쓰면 쉽게 해결이 됩니다.
+
+  ``` r
+  library(reshape)
+
+  phylum_2 <- melt(phylum)
+
+  head(phylum_2) # 맨위 5 열만 보기
+
+  # colname은 임의로 지정되서 고쳐 줍니다.
+
+  colnames(phylum_2) <- c("Phylum", "Sample", "Rel_abun")
+
+  ```
+  이제 그래프 그리는 준비가 끝났습니다.
+
+#### 그래프 그려보기
+  가장 심플한 코드로 주요 정보만 표현하는 R코드를 짜면 아래와 같습니다.
+
+  ``` r
+  library(ggplot2)
+
+  ggplot(data = phylum, 
+       mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+
+    geom_bar(position = "stack", stat = "identity")
+  ```
+
+  여기서 그래프 문제를 살펴볼까요?
+  Others는 중요도가 낮은 정보인데 순서가 중간에 있어 구분하기 힘들어 보입니다.
+  데이터를 factor로 손봐 줍시다.
+
+  ``` r
+  # 옆으로 긴 phylum data.frame을 다시 봅시다.
+  phylum$Phylum # c() 함수로 일일이 character vector를 만드는 것보단 편하다고 판단
+
+  phylum_2$Phylum <- factor(phylum_2$Phylum, levels = phylum$Phylum)
+  ```
+
+  데이터를 손봤으니 다시 ...
+
+  ``` r
+  ggplot(data = phylum_2, 
+       mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+
+    geom_bar(position = "stack", stat = "identity")
+  ```
+
+  색깔 순서가 고처졌고....  
+  색깔에 테두리가 흰색으로 있으면 조금더 보기 좋아질꺼 같으니 추가하고...  
+  x축 Y축 제목도 바꿔봅시다.
+
+  ``` r
+  ggplot(data = phylum_2, # 위에꺼 그데로 
+       mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+ # 위에꺼 그데로
+    geom_bar(position = "stack", stat = "identity", color="white")+ # + 꼭 쓰셔야 됩니다. color 정보 추가
+    xlab("")+ # X축 제목 지우기
+    ylab("Relative abundance (%)")  # Y축 제목 바꾸기
+  ```
+  
+  여기서 욕심을 좀더 내보자면 뭔가 사이트별로 x축이 나뉘어 지지 않아 가독성이 떨어집니다.
+  데이터를 좀더 편집하고 그래프를 그려봅시다.
+  
+  ``` r
+  # 샘플 이름에서 반복수를 뜻하는 숫자를 모두 때서 사이트만 추출하기
+  phylum_2$site <- gsub(pattern = "[0-9]", replacement = "", x = phylum_2$Sample )
+  
+  head(phylum_2$site)
+
+  ggplot(data = phylum_2, # 위에꺼 그데로 
+       mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+ # 위에꺼 그데로
+    geom_bar(position = "stack", stat = "identity", color="white")+  # 위에꺼 그데로
+    xlab("")+  # 위에꺼 그데로
+    ylab("Relative abundance (%)") + # + 꼭 쓰세요.
+    facet_grid(.~site, scales = "free") # site 기준으로 기존 그래프를 나눔
+    # A ~ B로 썼을 떼 B는 열로 나누고, A는 행으로 나눔.
+  ```
+
+이것으로 기존에 배웠던걸 복습하며 쪼오끔 내용 추가해서 그래프를 그려보았습니다.
+그럼 다음주에 봐요.
+
+이하 코드 총 정리...
+
+``` r
+#먼저 배포한 자료(phylum.csv)를 문서폴더에 넣어주세요.
+phylum <- read.csv("phylum.csv")
+
+# Relative abundance 구하는 함수
+rel_abundancing <-function(x){
+  x/sum(x)*100
+}
+
+# 위함수를  순차적으로 적용하는 반본문
+for(i in 2:34){
+  phylum[,i] <- rel_abundancing(phylum[,i])
+}
+
+# data.frame을 위아래 긴형태로 정리
+library(reshape)
+phylum_2 <- reshape::melt(phylum)
+head(phylum_2)
+colnames(phylum_2) <- c("Phylum", "Sample", "Rel_abun")
+
+# 데이터 수정 및 추가
+phylum_2$Phylum <- 
+  factor(phylum_2$Phylum, levels = phylum$Phylum) # character를 factor로...
+
+phylum_2$site <- 
+  gsub(pattern = "[0-9]", replacement = "", x = phylum_2$Sample ) # 샘플이름에서 site만 추출 하여 저장
+
+# 그래프 작성
+ggplot(data = phylum_2,
+       mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+
+  geom_bar(position = "stack", stat = "identity", color="white")+  
+  xlab("")+  
+  ylab("Relative abundance (%)") + 
+  facet_grid(.~site, scales = "free")
+```
