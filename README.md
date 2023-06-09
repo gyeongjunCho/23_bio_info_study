@@ -1149,8 +1149,13 @@ phylum
   Relatie abundance (%)에 대한 수식을 볼까요?
 
   <div align="center">
+  
+  $A$: 한 샘플내의 한 종류의 미생물량
+  $B$: 한 샘플내의 미생물 총량   
+ 
+  <br>
 
-  $ relative~abundance = \cfrac {한종류의~미생물양} {한샘플의~총미생물양} \times 100 $
+  $ relative~aubndace(\%) = \cfrac {A} {B} \times 100 $ 
 
   </div>
 
