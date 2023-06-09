@@ -1150,7 +1150,7 @@ phylum
 
   <div align="center">
 
-  $ relative~abundance(\%)=\cfrac{한~종류의~미생물량}{한~샘플내~총~미생물량} \times 100 $
+  $ relative~abundance = \cfrac {한종류의~미생물양} {한샘플의~총미생물양} \times 100 $
 
   </div>
 
