@@ -1517,9 +1517,9 @@ install. packages(pkgs)
 
   ggplot(data = value2,
        mapping = aes(x = LETTERS, y = letters, fill = values))+
-  geom_tile(stat = "identity", color="white") +
-  geom_text(aes(label = star)) +
-  scale_fill_distiller(palette = "RdYlGn")
+    geom_tile(stat = "identity", color="white") +
+    geom_text(aes(label = star)) +
+    scale_fill_distiller(palette = "RdYlGn")
   ```
   
   위는 순수 ggplot2 패키지의 기능만으로 그린 heatmap이고요,   
@@ -1528,11 +1528,11 @@ install. packages(pkgs)
   ```r
   ggplot(data = value2,
        mapping = aes(x = LETTERS, y = letters, fill = values))+
-  geom_tile(stat = "identity", color="white") +
-  geom_text(aes(label = star)) +
-  scale_fill_distiller(palette = "RdYlGn") +
-  scale_y_dendrogram(hclust = letters_hclust) +
-  scale_x_dendrogram(hclust = LETTERS_hclust)
+    geom_tile(stat = "identity", color="white") +
+    geom_text(aes(label = star)) +
+    scale_fill_distiller(palette = "RdYlGn") +
+    scale_y_dendrogram(hclust = letters_hclust) +
+    scale_x_dendrogram(hclust = LETTERS_hclust)
   ```
   
   # 계층적 클러스터링 좀 더 손보기
@@ -1594,11 +1594,11 @@ install. packages(pkgs)
   ``` r
   ggplot(data = value2,
        mapping = aes(x = LETTERS, y = letters, fill = values)) +
-  geom_tile(stat = "identity", color="white") +
-  geom_text(aes(label = star)) +
+    geom_tile(stat = "identity", color="white") +
+    geom_text(aes(label = star)) +
     scale_fill_distiller(palette = "RdYlGn") +
-  scale_y_dendrogram(hclust = letters_hclust2) +
-  scale_x_dendrogram(hclust = LETTERS_hclust2)
+    scale_y_dendrogram(hclust = letters_hclust2) +
+    scale_x_dendrogram(hclust = LETTERS_hclust2)
 
   ```
 
