@@ -54,7 +54,7 @@
 ### 6월
 [1주차 : 글자데이터 다루기](#6월-1주차--글자-데이터-다루기)  
 [2주차 : 숫자관련 연산자, 데이터구조](#6월-2주차-숫자관련-연산자-데이터-구조)  
-[3주차 : (복습) data.frame 다루고 그래프 그리기](#6월-3주차-복습dataframe-다루고-그래프-그리기)  
+[3주차 : (복습) data.frame 다루고 그래프 그리기 (bar graph)](#6월-3주차-복습dataframe-다루고-그래프-그리기-bar-graph)  
 
 <br>
 
@@ -1126,9 +1126,9 @@ print(df)
     
     여기까지 4주 동안 R에서 제가 연구에 자주 활용했던 내용 중에서, R의 기초적인 규칙에 대하여 알아보았습니다. 한 동안은 익숙해질 때까지 몇번더 지금까지 내용들을 복습하겠습니다. 다음주는 제일 중요한 첫 모임 내용(데이터 유형과 구조의 종류)으로 부터 시작하고, 다시 해보거나 알려줬으면 하는 내용을 6월 9일 저녁까지 제 개인 카톡으로 남겨주세요. 많은 문의가 온 내용 중심으로 복습 강의 내용을 구성해 보겠습니다.
 
-    ------
+------
 
-### 6월 3주차: (복습)data.frame 다루고 그래프 그리기
+### 6월 3주차: (복습)data.frame 다루고 그래프 그리기 (bar graph)
 
 #### 실제 데이터 불러오기
 
@@ -1412,4 +1412,282 @@ ggplot(data = phylum_2,
   xlab("")+  
   ylab("Relative abundance (%)") + 
   facet_grid(.~site, scales = "free")
+```
+
+------
+
+### 6월 4주차: (복습)data.frame 다루고 그래프 그리기 (heatmap)
+
+오늘도 실제 데이터로 heatmap을 그려보겠습니다.
+
+<br>
+
+필요한 패키지는 `reshape`, `ggplot2`, `ggh4x`, `ggdendro` 입니다.  
+우선 패키지가 설치안됬으면 인터넷이 되는 곳에서 아래 명령어로 패키지를 설치합니다.  
+
+``` r
+pkgs <- c("reshape", "ggplot2", "ggh4x", "ggdendro")
+install. packages(pkgs)
+```
+
+<br>
+
+#### 파일 data.frame으로 불러오기  
+  
+  먼저 배포한 자료 2개(value.csv, star.csv)를 문서폴더에 넣어주세요.  
+
+  ``` r
+  value <- read.csv("value.csv") # 분석값
+  value
+  
+  star <- read.csv("star.csv") # 유의도 * 라벨
+  star
+  star[, 3] <- "" # NA로 입력됬네요. 수정해줍시다.
+  ```
+
+<br>
+
+#### 거리구하기
+  거리구하기는 `dist()`함수를 사용합니다.  
+  행이름(rownames)를 기준으로 거리를 구합니다. 그러니 우선 행이름을 정리해 줍시다.
+  ``` r
+  value # 행이름이 숫자로 되어있음
+  rownames(value) <- value$X
+  ```
+  
+  <br>
+  그리고 거리를 두 번 구합니다. 나중에 각각 x축 y축 두개의 덴드로그램을 그릴때 사용됩니다.
+
+  `?dist()`를 입력해보면 method를 여러개 설정할수 있는데 `"canberra"`로 설정하겠습니다.  
+  입력하지 않으면 기본값인 `"euclidean"`으로 진행됩니다.  
+
+  ``` r
+  # 거리구하기
+  ?dist()
+  
+  value[, -1]
+  t(value[, -1])
+
+  letters_dist <- dist(value[,-1], method = "canberra") # method  종류에 따라 여러 방법을 바꿀수 있음
+  LETTERS_dist <- dist(t(value[,-1]), method = "canberra") # method  종류에 따라 여러 방법을 바꿀수 있음
+  ```
+  여기서 함수 `t()` 행과 열을 서로 뒤바꾸는 함수 입니다.
+
+#### 계층적 클러스터링 하기
+  구한 거리로 계층적 클러스터링(Hierarchical clustering)은 함수 `hclust()`를 구합니다.
+  `?hclust()`로 method를 보면 여러 방법으로 클러스터링 가능합니다. 여기서는 `"complete"`로 진행하겠습니다.
+  입력하지 않아도 기본값인 `"complete"`로 진행 됩니다.
+  ``` r
+  # Hierarchical clustering
+  ? hclust()
+  letters_hclust <- hclust(letters_dist, method = "complete") # method  종류에 따라 여러 방법을 바꿀수 있음
+  LETTERS_hclust <- hclust(LETTERS_dist, method = "complete")
+
+  plot(letters_hclust) # 빠르고 간단하게 hclust 결과 시각화하여 확인
+  plot(LETTERS_hclust)
+  ```
+
+#### 그래프를 그리기 위한 data.frame 정리하기
+  `value`만으로는 ggplot2를 활용하기 힘듧니다. 열이름(colname)으로 축들을 지정해 줄수 없으니깐요. 이걸 `reshape` 패키지의
+  `melt()`함수로 정리해 줍시다.
+
+  ``` r
+  # data.frame을 위아래 긴형태로 정리
+  library(reshape)
+
+  value2 <- melt(value)
+  head(value2) 
+  colnames(value2) <- c("letters", "LETTERS", "values") #colnames가 엉망이므로 바꿔즙니다.
+
+  star2 <- melt(star, id.vars = "X") # value와 star는 data.frame의 행렬구조가 같음을 이용해서
+  value2$star <- star2$value # star2로 길게 정리해서 value 열만 추출하여 value2의 star 열에 추가
+  ```
+
+  #### 그래프 작성
+  필요한 패키지를 불러오고, 첫 그래프 골격을 짜봅시다.
+  
+  ``` r
+  # 그래프 작성
+  library("ggplot2")
+  library("ggdendro")
+  library("ggh4x")
+  
+  ?scale_fill_distiller() # 여기서 색깔 팔레트 이름을 확인해 줍시다.
+
+  ggplot(data = value2,
+       mapping = aes(x = LETTERS, y = letters, fill = values))+
+  geom_tile(stat = "identity", color="white") +
+  geom_text(aes(label = star)) +
+  scale_fill_distiller(palette = "RdYlGn")
+  ```
+  
+  위는 순수 ggplot2 패키지의 기능만으로 그린 heatmap이고요,   
+  이제 `ggh4x`와 `ggdendro`의 확장 기능을 활용해서 dendrogram을 추가해 봅시다.
+
+  ```r
+  ggplot(data = value2,
+       mapping = aes(x = LETTERS, y = letters, fill = values))+
+  geom_tile(stat = "identity", color="white") +
+  geom_text(aes(label = star)) +
+  scale_fill_distiller(palette = "RdYlGn") +
+  scale_y_dendrogram(hclust = letters_hclust) +
+  scale_x_dendrogram(hclust = LETTERS_hclust)
+  ```
+  
+  # 계층적 클러스터링 좀 더 손보기
+  근데 유의하지 않은 값들도 클러스터링에 계산이 포함되니 규칙성을 찾기가 힘들어 보입니다.
+  data를 손봐서 이것들을 새로 구해 봅시다.
+
+  
+  여기서 필요한 함수는 `which()` 인데요.
+  벡터에서 TRUE인 경우의 위치를 반환해줍니다.
+  ``` r
+  test <- c(TRUE, TRUE, FALSE, FALSE, TRUE)
+  test
+  which(test) # 벡터에서 TRUE인 경우의 위치를 반환함
+
+  test2 <- c(1 == 1, 
+             3 > 2,
+             3 < 1, 
+             1 != 0)
+  test2
+  which(test2)
+  ```
+
+  먼저 value2를 value3로 복사하고 ...
+  `which()`를 활용해서 `value3$star`가 `""` 인 경우를 `value3$values`값을 0으로 강제변환시켜 봅시다.
+
+  ``` r
+  value3 <- value2
+  nostar_rows <- which(value3$star == "")
+  value3$values[nostar_rows] <- 0
+  value3
+  ```
+
+  그다음 `melt()`를 역방향 함수인 해주는 `reshape` 패키지의 `cast()` 함수를 사용해 봅시다.
+  열이 3개일때 사용해기 간편해서 `value3[,1:3]`을 사용합니다.
+  
+  ``` r
+  value4 <- cast(value3[,1:3], letters ~ LETTERS)
+  value4 <- data.frame(value4) # cast 함수의 버그인지 data.frame이 불완전하여 한번 강제변환 함
+  rownames(value4) <- value4$letters
+  ```
+  
+  위에서 했던데로 다시 거리와, 계층적 클러스터링을 진행합니다.
+
+  ``` r
+  value4[, -1]
+
+  letters_dist2 <- dist(value4[, -1], method = "manhattan")
+  LETTERS_dist2 <- dist(t(value4[, -1]), method = "manhattan")
+
+  letters_hclust2 <- hclust(letters_dist2, method = "complete")
+  LETTERS_hclust2 <- hclust(LETTERS_dist2, method = "complete")
+
+  plot(letters_hclust2)
+  plot(LETTERS_hclust2)
+  ```
+  
+  다시구한 hclust 결과를 반영하여 그래프를 그리면...
+
+  ``` r
+  ggplot(data = value2,
+       mapping = aes(x = LETTERS, y = letters, fill = values)) +
+  geom_tile(stat = "identity", color="white") +
+  geom_text(aes(label = star)) +
+    scale_fill_distiller(palette = "RdYlGn") +
+  scale_y_dendrogram(hclust = letters_hclust2) +
+  scale_x_dendrogram(hclust = LETTERS_hclust2)
+
+  ```
+
+  조금더 분석결과가 유의한것만 놓고 볼 때 clustering이 제대로 된걸 볼수 있습니다.
+  다음주는 PCA를 그려보겠습니다.
+
+
+이하 코드 총 정리 ...
+
+``` r
+#먼저 배포한 자료 2개(value.csv, star.csv)를 문서폴더에 넣어주세요.
+value <- read.csv("value.csv") # 분석값
+value
+
+star <- read.csv("star.csv") # 유의도 * 라벨
+star
+star[, 3] <- "" 
+
+# 거리구하기
+rownames(value) <- letters[1:nrow(value)]
+
+?dist()
+
+letters_dist <- dist(value[,-1], method = "canberra") # method  종류에 따라 여러 방법을 바꿀수 있음
+LETTERS_dist <- dist(t(value[,-1]), method = "canberra") # method  종류에 따라 여러 방법을 바꿀수 있음
+
+# Hierarchical clustering
+? hclust()
+letters_hclust <- hclust(letters_dist, method = "complete") # method  종류에 따라 여러 방법을 바꿀수 있음
+LETTERS_hclust <- hclust(LETTERS_dist, method = "complete")
+
+plot(letters_hclust)
+plot(LETTERS_hclust)
+
+# data.frame을 위아래 긴형태로 정리
+library(reshape)
+
+value2 <- melt(value)
+head(value2)
+colnames(value2) <- c("letters", "LETTERS", "values")
+
+star2 <- melt(star, id.vars = "X")
+value2$star <- star2$value
+
+# 그래프 작성
+library("ggplot2")
+library("ggdendro")
+library("ggh4x")
+
+?scale_fill_distiller
+
+#1차 완성
+ggplot(data = value2,
+       mapping = aes(x = LETTERS, y = letters, fill = values))+
+  geom_tile(stat = "identity", color="white") +
+  geom_text(aes(label = star))+
+  scale_fill_distiller(palette = "RdYlGn") +
+  scale_y_dendrogram(hclust = letters_hclust) +
+  scale_x_dendrogram(hclust = LETTERS_hclust)
+
+
+
+# 유의한 값만가지고 hclust 구하기
+value3 <- value2
+nostar_rows <- which(value3$star == "")
+value3$values[nostar_rows] <- 0
+value3
+
+value4 <- cast(value3[,1:3], letters ~ LETTERS)
+value4 <- data.frame(value4)
+rownames(value4) <- value4$letters
+
+value4[, -1]
+
+letters_dist2 <- dist(value4[, -1], method = "manhattan")
+LETTERS_dist2 <- dist(t(value4[, -1]), method = "manhattan")
+
+letters_hclust2 <- hclust(letters_dist2, method = "complete")
+LETTERS_hclust2 <- hclust(LETTERS_dist2, method = "complete")
+
+plot(letters_hclust2)
+plot(LETTERS_hclust2)
+
+# 2차 완성
+ggplot(data = value2,
+       mapping = aes(x = LETTERS, y = letters, fill = values)) +
+  geom_tile(stat = "identity", color="white") +
+  geom_text(aes(label = star)) +
+  scale_fill_distiller(palette = "RdYlGn") +
+  scale_y_dendrogram(hclust = letters_hclust2) +
+  scale_x_dendrogram(hclust = LETTERS_hclust2)
+
 ```
