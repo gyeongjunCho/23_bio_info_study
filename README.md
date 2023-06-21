@@ -1535,7 +1535,7 @@ install. packages(pkgs)
     scale_x_dendrogram(hclust = LETTERS_hclust)
   ```
   
-  # 계층적 클러스터링 좀 더 손보기
+  #### 계층적 클러스터링 좀 더 손보기
   근데 유의하지 않은 값들도 클러스터링에 계산이 포함되니 규칙성을 찾기가 힘들어 보입니다.
   data를 손봐서 이것들을 새로 구해 봅시다.
 
