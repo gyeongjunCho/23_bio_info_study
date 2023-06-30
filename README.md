@@ -57,6 +57,10 @@
 [3주차 : (복습) data.frame 다루고 그래프 그리기 (bar graph)](#6월-3주차-복습dataframe-다루고-그래프-그리기-bar-graph)   
 [4주차 : (복습) data.frame 다루고 그래프 그리기 (heatmap)](#6월-4주차-복습dataframe-다루고-그래프-그리기-heatmap) 
 
+
+### 7월
+[1주차 : (복습) data.frame 다루고 그래프 그리기 (PCA)](#7월-1주차-복습dataframe-다루고-그래프-그리기-pca)
+
 <br>
 
 ------
@@ -1340,7 +1344,7 @@ phylum
 
   ``` r
   ggplot(data = phylum_2, 
-       mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+
+         mapping = aes(x = Sample, y = Rel_abun, fill=Phylum))+
     geom_bar(position = "stack", stat = "identity")
   ```
 
@@ -1692,3 +1696,243 @@ ggplot(data = value2,
   scale_x_dendrogram(hclust = LETTERS_hclust2)
 
 ```
+
+------
+
+### 7월 1주차: (복습)data.frame 다루고 그래프 그리기 (PCA)
+
+오늘도 실제 데이터로 PCA를 그려보겠습니다.  
+배포한 자료를 문서폴더에 넣어주세요.  
+
+그리고 PCA 결과를 시각화 하는 과정에서 추가로 필요한 `ggforce`라는 패키지를 설치해 주세요.  
+예제로 쓸 데이터는 특수하게도 `ggforce`가 필요하더라구요.
+
+``` r
+install.packages("ggforce")
+```
+
+ #### 데이터 프레임 정리하기  
+ read.csv 자료를 읽어옵니다.
+
+ ``` r
+ data <- read.csv("example_data.csv")
+ ```
+ 
+ 원래 colname과 rowname은 띄어쓰기나 특수문자 자동으로 안됩니다.
+ 그래서 수작업으로 잠시 정리해 줍시다.
+ 
+ ``` r
+ #rowname 정리
+ rownames(data)
+ sample.group <- data[,1]
+ sample.ID <- rep(c("_1","_2","_3"),3)
+
+ data.rowname <- paste(sample.group, sample.ID, sep="")
+ data.rowname
+ rownames(data) <- data.rowname
+
+ #colname 정리
+ colnames(data)
+ colnames(data) <- c("2-methyl-1-butanol",
+                     "1-hexanol",
+                     "2-methylbutyl acetate",
+                     "hexyl acetate",
+                     "hexyl 2-methylbutanoate",
+                     "hexyl hexanoate"
+ )
+  
+ data2 <- data[,-1] # 맨 앞 열은 PCA 계산에 필요 없으므로 제거
+ ``` 
+
+ #### PCA 계산하기
+ PCA는 `prcomp()` 함수로 진행합니다.
+ PCA를 공부해 보니 여러 종류가 있더군요. 그냥하는 방법이 있고, 데이터를 평균이 0이고 분포가 1인 수로 표준화 한다음 하는 방법이 있었습니다.
+ 데이터 값들이 크고 한눈에 잘 안들어와서 표준화 실행후 하는 방법을 택했습니다. `scale. = TRUE`
+ 
+ ```r
+ pca <- prcomp(data2, scale. = T)
+ pca
+ ```
+ 
+ pca 결과값이 list로 나오는데요.  
+ sdev: 각 주성분의 표준 편차를 담고 있는 벡터  
+ rotation: 변수 정보를 담고 있는 행렬. 원본 변수가 주성분(PC)에 얼마나 기여하는지를 보여줍니다.  
+ center: 원본 데이터를 중심에 맞추는데 사용된 평균 값  
+ scale: 원본 데이터를 스케일링하는데 사용된 스케일 값  
+ x: 각 관측치의 주성분 점수를 담고 있는 행렬. 이는 각 관측치가 주성분 공간에서 어디에 위치하는지를 나타냅니다.  
+ 
+ 각 값들은 아래처럼 입력하면 볼수 있습니다. 
+ 
+ ``` r
+ pca$sdev
+ pca$roation
+ pca$center
+ pca$scale
+ pca$x
+ ```
+ 
+ 그리고 다음 한 줄로 그래프를 빠르게 볼수 있습니다.
+ 
+ ```r
+ biplot(pca)
+ ```
+ 
+ #### ggplot 으로 PCA 결과 시각화 하기   
+ 보기가 `ggplot`로 그린거에 비하여 좋진 않아 다음의 작업으로 시각화를 해줍니다.
+ 
+ ```r
+ pca_x <- as.data.frame(pca$x)[,1:2] # pca$x에서 biplot의 점데이터 추출...
+ 
+ pca_x$group <- gsub("_[123]$" , "", rownames(pca_x)) # _숫자를 제거, 원래 반복 그룹으로 보이게 함
+ pca_x$group
+ ```
+ 
+ 우선 `ggplot`으로 뼈대를 간단히 볼까요?  
+ ```r
+ library(ggplot2)
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+  geom_point()+
+  coord_fix() # x축과 y축의 눈금 비율이 1:1로 고정시키는 함수
+ ```
+ 
+ 보통 PCA를 그리면 타원으로 묶기도 하는데 원래는 다음 함수로 작동을 하지만..
+ ```r
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+  geom_point()+
+  coord_fix()+
+  stat_ellipse(levels =0.95) # 95%정도의 점들이 포함되는 타원 
+ ```
+
+ 각 그룹의 갯수가 작아서 계산이 되질 않아 다른 방법을 사용했습니다.
+ 
+ ```r
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+  geom_point()+
+  coord_fix()+
+  geom_mark_ellipse(expand=1)
+ ```
+ 이건 **Khachiyan** 알고리즘으로 점들의 분포를 표현하는 최적의 타원을 그려주는 방식입니다. `expand`을 설정하여 타원의 크기를 수정합니다.
+ 자세한 내용은 7월 1주차 자료에 chatgpt4와 제가 나눈 대화를 보면 됩니다.
+
+  
+ 그리고 ...
+ 논문을 보면 각 축에 %를 나타내는 값이 있는데 그건 각 축이 기존 변수를 종합적으로 대변하는지 나타내는 **eigen centrality** 값입니다.
+ 계산을 하면 다음과 같습니다.
+
+ ``` r
+ # 각 주성분에 대한 explained variance (eigen centrality)를 계산합니다
+ explained_variance_ratio <- pca$sdev^2 / sum(pca$sdev^2)
+ 
+ # 첫 두 주성분에 대한 explained variance를 퍼센트로 표시합니다
+ explained_variance_percent <- explained_variance_ratio * 100
+ explained_variance_percent[1:2]
+ ```
+
+ 저 값을 참고하여 그래프를 그리면 다음과 같습니다.
+ ```r
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+  geom_point()+
+  coord_fix()+
+  geom_mark_ellipse()+
+  ylab("PC2 (8.13 %)")+
+  xlab("PC1 (84.22 %)")+
+  theme_classic() # 하얀바탕이 되는 클래식한 테마 적용
+ ```
+
+ 그리고 biplot에서 화살표는 원래 변수가 평면상에 어떻게 표현되는지를 뜻하는 것으로 추가를 하면 다음과 같습니다.
+ ``` r
+ #pca$rotation 값 추출 후 data.frame 정리
+ pca_rotation <- as.data.frame(pca$rotation)[,1:2]
+ pca_rotation$name <- rownames(pca_rotation)
+
+ # 시각화
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+  geom_point()+
+  coord_fix()+
+  geom_mark_ellipse()+
+  geom_text(data=pca_rotation, 
+            mapping=aes(label=name,
+                        color=NULL))+
+  geom_segment(data=pca_rotation, 
+               mapping=aes(xend=0, yend=0,
+                           color=NULL), alpha = 0.5,
+               arrow = arrow(length = unit(0.3, "cm"), ends="first"))+
+  #first 대신, last, both 입력시 끝, 양쪽에 달림.
+  ylab("PC2 (8.13 %)")+
+  xlab("PC1 (84.22 %)")+
+  theme_classic()+
+  coord_fix()
+ ```
+ 
+ 이것으로 데이터프레임 핸들링하고, PCA 그려보기 마치겠습니다.
+
+ 이하 전체 코드
+
+ ``` r
+ data <- read.csv("example_data.csv")
+ 
+ #rowname 정리
+ rownames(data)
+ sample.group <- data[,1]
+ sample.ID <- rep(c("_1","_2","_3"),3)
+
+ data.rowname <- paste(sample.group, sample.ID, sep="")
+ data.rowname
+ rownames(data) <- data.rowname
+ 
+ #colname 정리
+ colnames(data)
+ colnames(data) <- c("2-methyl-1-butanol",
+                     "1-hexanol",
+                     "2-methylbutyl acetate",
+                     "hexyl acetate",
+                     "hexyl 2-methylbutanoate",
+                     "hexyl hexanoate"
+ )
+
+ data2 <- data[,-1]
+
+ pca <- prcomp(data2, scale. = T)
+ pca
+ 
+ biplot(pca)
+
+ pca_x <- as.data.frame(pca$x)[,1:2]
+
+ pca_x$group <- gsub("_[123]$" , "", rownames(pca_x))
+ pca_x$group
+
+ library(ggplot2)
+ library(ggforce)
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+   geom_point()+
+   coord_fix()
+
+ # 각 주성분에 대한 explained variance (eigen centrality)를 계산합니다
+ explained_variance_ratio <- pca$sdev^2 / sum(pca$sdev^2)
+
+ # 첫 두 주성분에 대한 explained variance를 퍼센트로 표시합니다
+ explained_variance_percent <- explained_variance_ratio * 100
+ explained_variance_percent[1:2]
+
+ pca_rotation <- as.data.frame(pca$rotation)[,1:2]
+ pca_rotation$name <- rownames(pca_rotation)
+
+ ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
+   geom_point()+
+   coord_fix()+
+   geom_mark_ellipse()+
+   geom_text(data=pca_rotation, 
+             mapping=aes(label=name,
+                         color=NULL))+
+   geom_segment(data=pca_rotation, 
+                mapping=aes(xend=0, yend=0,
+                            color=NULL), alpha = 0.5,
+                arrow = arrow(length = unit(0.3, "cm"), ends="first"))+
+ #first 대신, last, both 입력시 끝, 양쪽에 달림.
+ ylab("PC2 (8.13 %)")+
+ xlab("PC1 (84.22 %)")+
+ theme_classic()
+ ```
+
+-----

@@ -299,6 +299,9 @@ pre[data-line] .line-highlight[data-end]:after {
 <a href="#6%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%88%AB%EC%9E%90%EA%B4%80%EB%A0%A8-%EC%97%B0%EC%82%B0%EC%9E%90-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B5%AC%EC%A1%B0">2&#xC8FC;&#xCC28; : &#xC22B;&#xC790;&#xAD00;&#xB828; &#xC5F0;&#xC0B0;&#xC790;, &#xB370;&#xC774;&#xD130;&#xAD6C;&#xC870;</a><br>
 <a href="#6%EC%9B%94-3%EC%A3%BC%EC%B0%A8-%EB%B3%B5%EC%8A%B5dataframe-%EB%8B%A4%EB%A3%A8%EA%B3%A0-%EA%B7%B8%EB%9E%98%ED%94%84-%EA%B7%B8%EB%A6%AC%EA%B8%B0-bar-graph">3&#xC8FC;&#xCC28; : (&#xBCF5;&#xC2B5;) data.frame &#xB2E4;&#xB8E8;&#xACE0; &#xADF8;&#xB798;&#xD504; &#xADF8;&#xB9AC;&#xAE30; (bar graph)</a><br>
 <a href="#6%EC%9B%94-4%EC%A3%BC%EC%B0%A8-%EB%B3%B5%EC%8A%B5dataframe-%EB%8B%A4%EB%A3%A8%EA%B3%A0-%EA%B7%B8%EB%9E%98%ED%94%84-%EA%B7%B8%EB%A6%AC%EA%B8%B0-heatmap">4&#xC8FC;&#xCC28; : (&#xBCF5;&#xC2B5;) data.frame &#xB2E4;&#xB8E8;&#xACE0; &#xADF8;&#xB798;&#xD504; &#xADF8;&#xB9AC;&#xAE30; (heatmap)</a></p>
+<h3 class="mume-header" id="7%EC%9B%94">7&#xC6D4;</h3>
+
+<p><a href="#7%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EB%B3%B5%EC%8A%B5dataframe-%EB%8B%A4%EB%A3%A8%EA%B3%A0-%EA%B7%B8%EB%9E%98%ED%94%84-%EA%B7%B8%EB%A6%AC%EA%B8%B0-pca">1&#xC8FC;&#xCC28; : (&#xBCF5;&#xC2B5;) data.frame &#xB2E4;&#xB8E8;&#xACE0; &#xADF8;&#xB798;&#xD504; &#xADF8;&#xB9AC;&#xAE30; (PCA)</a></p>
 <br>
 <hr>
 <br>
@@ -1472,7 +1475,7 @@ phylum<span class="token operator">$</span>Phylum <span class="token comment"># 
 phylum_2<span class="token operator">$</span>Phylum <span class="token operator">&lt;-</span> factor<span class="token punctuation">(</span>phylum_2<span class="token operator">$</span>Phylum<span class="token punctuation">,</span> levels <span class="token operator">=</span> phylum<span class="token operator">$</span>Phylum<span class="token punctuation">)</span>
 </pre><p>&#xB370;&#xC774;&#xD130;&#xB97C; &#xC190;&#xBD24;&#xC73C;&#xB2C8; &#xB2E4;&#xC2DC; ...</p>
 <pre data-role="codeBlock" data-info="r" class="language-r">ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> phylum_2<span class="token punctuation">,</span> 
-     mapping <span class="token operator">=</span> aes<span class="token punctuation">(</span>x <span class="token operator">=</span> Sample<span class="token punctuation">,</span> y <span class="token operator">=</span> Rel_abun<span class="token punctuation">,</span> fill<span class="token operator">=</span>Phylum<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+       mapping <span class="token operator">=</span> aes<span class="token punctuation">(</span>x <span class="token operator">=</span> Sample<span class="token punctuation">,</span> y <span class="token operator">=</span> Rel_abun<span class="token punctuation">,</span> fill<span class="token operator">=</span>Phylum<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
   geom_bar<span class="token punctuation">(</span>position <span class="token operator">=</span> <span class="token string">&quot;stack&quot;</span><span class="token punctuation">,</span> stat <span class="token operator">=</span> <span class="token string">&quot;identity&quot;</span><span class="token punctuation">)</span>
 </pre><p>&#xC0C9;&#xAE54; &#xC21C;&#xC11C;&#xAC00; &#xACE0;&#xCC98;&#xC84C;&#xACE0;....<br>
 &#xC0C9;&#xAE54;&#xC5D0; &#xD14C;&#xB450;&#xB9AC;&#xAC00; &#xD770;&#xC0C9;&#xC73C;&#xB85C; &#xC788;&#xC73C;&#xBA74; &#xC870;&#xAE08;&#xB354; &#xBCF4;&#xAE30; &#xC88B;&#xC544;&#xC9C8;&#xAEBC; &#xAC19;&#xC73C;&#xB2C8; &#xCD94;&#xAC00;&#xD558;&#xACE0;...<br>
@@ -1750,7 +1753,189 @@ ggplot<span class="token punctuation">(</span>data <span class="token operator">
   scale_y_dendrogram<span class="token punctuation">(</span>hclust <span class="token operator">=</span> letters_hclust2<span class="token punctuation">)</span> <span class="token operator">+</span>
   scale_x_dendrogram<span class="token punctuation">(</span>hclust <span class="token operator">=</span> LETTERS_hclust2<span class="token punctuation">)</span>
 
-</pre>
+</pre><hr>
+<h3 class="mume-header" id="7%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EB%B3%B5%EC%8A%B5dataframe-%EB%8B%A4%EB%A3%A8%EA%B3%A0-%EA%B7%B8%EB%9E%98%ED%94%84-%EA%B7%B8%EB%A6%AC%EA%B8%B0-pca">7&#xC6D4; 1&#xC8FC;&#xCC28;: (&#xBCF5;&#xC2B5;)data.frame &#xB2E4;&#xB8E8;&#xACE0; &#xADF8;&#xB798;&#xD504; &#xADF8;&#xB9AC;&#xAE30; (PCA)</h3>
+
+<p>&#xC624;&#xB298;&#xB3C4; &#xC2E4;&#xC81C; &#xB370;&#xC774;&#xD130;&#xB85C; PCA&#xB97C; &#xADF8;&#xB824;&#xBCF4;&#xACA0;&#xC2B5;&#xB2C8;&#xB2E4;.<br>
+&#xBC30;&#xD3EC;&#xD55C; &#xC790;&#xB8CC;&#xB97C; &#xBB38;&#xC11C;&#xD3F4;&#xB354;&#xC5D0; &#xB123;&#xC5B4;&#xC8FC;&#xC138;&#xC694;.</p>
+<p>&#xADF8;&#xB9AC;&#xACE0; PCA &#xACB0;&#xACFC;&#xB97C; &#xC2DC;&#xAC01;&#xD654; &#xD558;&#xB294; &#xACFC;&#xC815;&#xC5D0;&#xC11C; &#xCD94;&#xAC00;&#xB85C; &#xD544;&#xC694;&#xD55C; <code>ggforce</code>&#xB77C;&#xB294; &#xD328;&#xD0A4;&#xC9C0;&#xB97C; &#xC124;&#xCE58;&#xD574; &#xC8FC;&#xC138;&#xC694;.<br>
+&#xC608;&#xC81C;&#xB85C; &#xC4F8; &#xB370;&#xC774;&#xD130;&#xB294; &#xD2B9;&#xC218;&#xD558;&#xAC8C;&#xB3C4; <code>ggforce</code>&#xAC00; &#xD544;&#xC694;&#xD558;&#xB354;&#xB77C;&#xAD6C;&#xC694;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">install.packages<span class="token punctuation">(</span><span class="token string">&quot;ggforce&quot;</span><span class="token punctuation">)</span>
+</pre><h4>&#xB370;&#xC774;&#xD130; &#xD504;&#xB808;&#xC784; &#xC815;&#xB9AC;&#xD558;&#xAE30;</h4>
+<p>read.csv &#xC790;&#xB8CC;&#xB97C; &#xC77D;&#xC5B4;&#xC635;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">data <span class="token operator">&lt;-</span> read.csv<span class="token punctuation">(</span><span class="token string">&quot;example_data.csv&quot;</span><span class="token punctuation">)</span>
+</pre><p>&#xC6D0;&#xB798; colname&#xACFC; rowname&#xC740; &#xB744;&#xC5B4;&#xC4F0;&#xAE30;&#xB098; &#xD2B9;&#xC218;&#xBB38;&#xC790; &#xC790;&#xB3D9;&#xC73C;&#xB85C; &#xC548;&#xB429;&#xB2C8;&#xB2E4;.<br>
+&#xADF8;&#xB798;&#xC11C; &#xC218;&#xC791;&#xC5C5;&#xC73C;&#xB85C; &#xC7A0;&#xC2DC; &#xC815;&#xB9AC;&#xD574; &#xC90D;&#xC2DC;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r"><span class="token comment">#rowname &#xC815;&#xB9AC;</span>
+rownames<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+sample.group <span class="token operator">&lt;-</span> data<span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span>
+sample.ID <span class="token operator">&lt;-</span> rep<span class="token punctuation">(</span>c<span class="token punctuation">(</span><span class="token string">&quot;_1&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;_2&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;_3&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span>
+
+data.rowname <span class="token operator">&lt;-</span> paste<span class="token punctuation">(</span>sample.group<span class="token punctuation">,</span> sample.ID<span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token string">&quot;&quot;</span><span class="token punctuation">)</span>
+data.rowname
+rownames<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">&lt;-</span> data.rowname
+
+<span class="token comment">#colname &#xC815;&#xB9AC;</span>
+colnames<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+colnames<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">&lt;-</span> c<span class="token punctuation">(</span><span class="token string">&quot;2-methyl-1-butanol&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;1-hexanol&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;2-methylbutyl acetate&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;hexyl acetate&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;hexyl 2-methylbutanoate&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;hexyl hexanoate&quot;</span>
+<span class="token punctuation">)</span>
+ 
+data2 <span class="token operator">&lt;-</span> data<span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token comment"># &#xB9E8; &#xC55E; &#xC5F4;&#xC740; PCA &#xACC4;&#xC0B0;&#xC5D0; &#xD544;&#xC694; &#xC5C6;&#xC73C;&#xBBC0;&#xB85C; &#xC81C;&#xAC70;</span>
+</pre><h4>PCA &#xACC4;&#xC0B0;&#xD558;&#xAE30;</h4>
+<p>PCA&#xB294; <code>prcomp()</code> &#xD568;&#xC218;&#xB85C; &#xC9C4;&#xD589;&#xD569;&#xB2C8;&#xB2E4;.<br>
+PCA&#xB97C; &#xACF5;&#xBD80;&#xD574; &#xBCF4;&#xB2C8; &#xC5EC;&#xB7EC; &#xC885;&#xB958;&#xAC00; &#xC788;&#xB354;&#xAD70;&#xC694;. &#xADF8;&#xB0E5;&#xD558;&#xB294; &#xBC29;&#xBC95;&#xC774; &#xC788;&#xACE0;, &#xB370;&#xC774;&#xD130;&#xB97C; &#xD3C9;&#xADE0;&#xC774; 0&#xC774;&#xACE0; &#xBD84;&#xD3EC;&#xAC00; 1&#xC778; &#xC218;&#xB85C; &#xD45C;&#xC900;&#xD654; &#xD55C;&#xB2E4;&#xC74C; &#xD558;&#xB294; &#xBC29;&#xBC95;&#xC774; &#xC788;&#xC5C8;&#xC2B5;&#xB2C8;&#xB2E4;.<br>
+&#xB370;&#xC774;&#xD130; &#xAC12;&#xB4E4;&#xC774; &#xD06C;&#xACE0; &#xD55C;&#xB208;&#xC5D0; &#xC798; &#xC548;&#xB4E4;&#xC5B4;&#xC640;&#xC11C; &#xD45C;&#xC900;&#xD654; &#xC2E4;&#xD589;&#xD6C4; &#xD558;&#xB294; &#xBC29;&#xBC95;&#xC744; &#xD0DD;&#xD588;&#xC2B5;&#xB2C8;&#xB2E4;. <code>scale. = TRUE</code></p>
+<pre data-role="codeBlock" data-info="r" class="language-r">pca <span class="token operator">&lt;-</span> prcomp<span class="token punctuation">(</span>data2<span class="token punctuation">,</span> scale. <span class="token operator">=</span> T<span class="token punctuation">)</span>
+pca
+</pre><p>pca &#xACB0;&#xACFC;&#xAC12;&#xC774; list&#xB85C; &#xB098;&#xC624;&#xB294;&#xB370;&#xC694;.<br>
+sdev: &#xAC01; &#xC8FC;&#xC131;&#xBD84;&#xC758; &#xD45C;&#xC900; &#xD3B8;&#xCC28;&#xB97C; &#xB2F4;&#xACE0; &#xC788;&#xB294; &#xBCA1;&#xD130;<br>
+rotation: &#xBCC0;&#xC218; &#xC815;&#xBCF4;&#xB97C; &#xB2F4;&#xACE0; &#xC788;&#xB294; &#xD589;&#xB82C;. &#xC6D0;&#xBCF8; &#xBCC0;&#xC218;&#xAC00; &#xC8FC;&#xC131;&#xBD84;(PC)&#xC5D0; &#xC5BC;&#xB9C8;&#xB098; &#xAE30;&#xC5EC;&#xD558;&#xB294;&#xC9C0;&#xB97C; &#xBCF4;&#xC5EC;&#xC90D;&#xB2C8;&#xB2E4;.<br>
+center: &#xC6D0;&#xBCF8; &#xB370;&#xC774;&#xD130;&#xB97C; &#xC911;&#xC2EC;&#xC5D0; &#xB9DE;&#xCD94;&#xB294;&#xB370; &#xC0AC;&#xC6A9;&#xB41C; &#xD3C9;&#xADE0; &#xAC12;<br>
+scale: &#xC6D0;&#xBCF8; &#xB370;&#xC774;&#xD130;&#xB97C; &#xC2A4;&#xCF00;&#xC77C;&#xB9C1;&#xD558;&#xB294;&#xB370; &#xC0AC;&#xC6A9;&#xB41C; &#xC2A4;&#xCF00;&#xC77C; &#xAC12;<br>
+x: &#xAC01; &#xAD00;&#xCE21;&#xCE58;&#xC758; &#xC8FC;&#xC131;&#xBD84; &#xC810;&#xC218;&#xB97C; &#xB2F4;&#xACE0; &#xC788;&#xB294; &#xD589;&#xB82C;. &#xC774;&#xB294; &#xAC01; &#xAD00;&#xCE21;&#xCE58;&#xAC00; &#xC8FC;&#xC131;&#xBD84; &#xACF5;&#xAC04;&#xC5D0;&#xC11C; &#xC5B4;&#xB514;&#xC5D0; &#xC704;&#xCE58;&#xD558;&#xB294;&#xC9C0;&#xB97C; &#xB098;&#xD0C0;&#xB0C5;&#xB2C8;&#xB2E4;.</p>
+<p>&#xAC01; &#xAC12;&#xB4E4;&#xC740; &#xC544;&#xB798;&#xCC98;&#xB7FC; &#xC785;&#xB825;&#xD558;&#xBA74; &#xBCFC;&#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">pca<span class="token operator">$</span>sdev
+pca<span class="token operator">$</span>roation
+pca<span class="token operator">$</span>center
+pca<span class="token operator">$</span>scale
+pca<span class="token operator">$</span>x
+</pre><p>&#xADF8;&#xB9AC;&#xACE0; &#xB2E4;&#xC74C; &#xD55C; &#xC904;&#xB85C; &#xADF8;&#xB798;&#xD504;&#xB97C; &#xBE60;&#xB974;&#xAC8C; &#xBCFC;&#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">biplot<span class="token punctuation">(</span>pca<span class="token punctuation">)</span>
+</pre><h4>ggplot &#xC73C;&#xB85C; PCA &#xACB0;&#xACFC; &#xC2DC;&#xAC01;&#xD654; &#xD558;&#xAE30;</h4>
+<p>&#xBCF4;&#xAE30;&#xAC00; <code>ggplot</code>&#xB85C; &#xADF8;&#xB9B0;&#xAC70;&#xC5D0; &#xBE44;&#xD558;&#xC5EC; &#xC88B;&#xC9C4; &#xC54A;&#xC544; &#xB2E4;&#xC74C;&#xC758; &#xC791;&#xC5C5;&#xC73C;&#xB85C; &#xC2DC;&#xAC01;&#xD654;&#xB97C; &#xD574;&#xC90D;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">pca_x <span class="token operator">&lt;-</span> as.data.frame<span class="token punctuation">(</span>pca<span class="token operator">$</span>x<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token comment"># pca$x&#xC5D0;&#xC11C; biplot&#xC758; &#xC810;&#xB370;&#xC774;&#xD130; &#xCD94;&#xCD9C;...</span>
+
+pca_x<span class="token operator">$</span>group <span class="token operator">&lt;-</span> gsub<span class="token punctuation">(</span><span class="token string">&quot;_[123]$&quot;</span> <span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span> rownames<span class="token punctuation">(</span>pca_x<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># _&#xC22B;&#xC790;&#xB97C; &#xC81C;&#xAC70;, &#xC6D0;&#xB798; &#xBC18;&#xBCF5; &#xADF8;&#xB8F9;&#xC73C;&#xB85C; &#xBCF4;&#xC774;&#xAC8C; &#xD568;</span>
+pca_x<span class="token operator">$</span>group
+</pre><p>&#xC6B0;&#xC120; <code>ggplot</code>&#xC73C;&#xB85C; &#xBF08;&#xB300;&#xB97C; &#xAC04;&#xB2E8;&#xD788; &#xBCFC;&#xAE4C;&#xC694;?</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">library<span class="token punctuation">(</span>ggplot2<span class="token punctuation">)</span>
+ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># x&#xCD95;&#xACFC; y&#xCD95;&#xC758; &#xB208;&#xAE08; &#xBE44;&#xC728;&#xC774; 1:1&#xB85C; &#xACE0;&#xC815;&#xC2DC;&#xD0A4;&#xB294; &#xD568;&#xC218;</span>
+</pre><p>&#xBCF4;&#xD1B5; PCA&#xB97C; &#xADF8;&#xB9AC;&#xBA74; &#xD0C0;&#xC6D0;&#xC73C;&#xB85C; &#xBB36;&#xAE30;&#xB3C4; &#xD558;&#xB294;&#xB370; &#xC6D0;&#xB798;&#xB294; &#xB2E4;&#xC74C; &#xD568;&#xC218;&#xB85C; &#xC791;&#xB3D9;&#xC744; &#xD558;&#xC9C0;&#xB9CC;..</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ stat_ellipse<span class="token punctuation">(</span>levels <span class="token operator">=</span><span class="token number">0.95</span><span class="token punctuation">)</span> <span class="token comment"># 95%&#xC815;&#xB3C4;&#xC758; &#xC810;&#xB4E4;&#xC774; &#xD3EC;&#xD568;&#xB418;&#xB294; &#xD0C0;&#xC6D0; </span>
+</pre><p>&#xAC01; &#xADF8;&#xB8F9;&#xC758; &#xAC2F;&#xC218;&#xAC00; &#xC791;&#xC544;&#xC11C; &#xACC4;&#xC0B0;&#xC774; &#xB418;&#xC9C8; &#xC54A;&#xC544; &#xB2E4;&#xB978; &#xBC29;&#xBC95;&#xC744; &#xC0AC;&#xC6A9;&#xD588;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_mark_ellipse<span class="token punctuation">(</span>expand<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+</pre><p>&#xC774;&#xAC74; <strong>Khachiyan</strong> &#xC54C;&#xACE0;&#xB9AC;&#xC998;&#xC73C;&#xB85C; &#xC810;&#xB4E4;&#xC758; &#xBD84;&#xD3EC;&#xB97C; &#xD45C;&#xD604;&#xD558;&#xB294; &#xCD5C;&#xC801;&#xC758; &#xD0C0;&#xC6D0;&#xC744; &#xADF8;&#xB824;&#xC8FC;&#xB294; &#xBC29;&#xC2DD;&#xC785;&#xB2C8;&#xB2E4;. <code>expand</code>&#xC744; &#xC124;&#xC815;&#xD558;&#xC5EC; &#xD0C0;&#xC6D0;&#xC758; &#xD06C;&#xAE30;&#xB97C; &#xC218;&#xC815;&#xD569;&#xB2C8;&#xB2E4;.<br>
+&#xC790;&#xC138;&#xD55C; &#xB0B4;&#xC6A9;&#xC740; 7&#xC6D4; 1&#xC8FC;&#xCC28; &#xC790;&#xB8CC;&#xC5D0; chatgpt4&#xC640; &#xC81C;&#xAC00; &#xB098;&#xB208; &#xB300;&#xD654;&#xB97C; &#xBCF4;&#xBA74; &#xB429;&#xB2C8;&#xB2E4;.</p>
+<p>&#xADF8;&#xB9AC;&#xACE0; ...<br>
+&#xB17C;&#xBB38;&#xC744; &#xBCF4;&#xBA74; &#xAC01; &#xCD95;&#xC5D0; %&#xB97C; &#xB098;&#xD0C0;&#xB0B4;&#xB294; &#xAC12;&#xC774; &#xC788;&#xB294;&#xB370; &#xADF8;&#xAC74; &#xAC01; &#xCD95;&#xC774; &#xAE30;&#xC874; &#xBCC0;&#xC218;&#xB97C; &#xC885;&#xD569;&#xC801;&#xC73C;&#xB85C; &#xB300;&#xBCC0;&#xD558;&#xB294;&#xC9C0; &#xB098;&#xD0C0;&#xB0B4;&#xB294; <strong>eigen centrality</strong> &#xAC12;&#xC785;&#xB2C8;&#xB2E4;.<br>
+&#xACC4;&#xC0B0;&#xC744; &#xD558;&#xBA74; &#xB2E4;&#xC74C;&#xACFC; &#xAC19;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r"><span class="token comment"># &#xAC01; &#xC8FC;&#xC131;&#xBD84;&#xC5D0; &#xB300;&#xD55C; explained variance (eigen centrality)&#xB97C; &#xACC4;&#xC0B0;&#xD569;&#xB2C8;&#xB2E4;</span>
+explained_variance_ratio <span class="token operator">&lt;-</span> pca<span class="token operator">$</span>sdev<span class="token operator">^</span><span class="token number">2</span> <span class="token operator">/</span> sum<span class="token punctuation">(</span>pca<span class="token operator">$</span>sdev<span class="token operator">^</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+<span class="token comment"># &#xCCAB; &#xB450; &#xC8FC;&#xC131;&#xBD84;&#xC5D0; &#xB300;&#xD55C; explained variance&#xB97C; &#xD37C;&#xC13C;&#xD2B8;&#xB85C; &#xD45C;&#xC2DC;&#xD569;&#xB2C8;&#xB2E4;</span>
+explained_variance_percent <span class="token operator">&lt;-</span> explained_variance_ratio <span class="token operator">*</span> <span class="token number">100</span>
+explained_variance_percent<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">]</span>
+</pre><p>&#xC800; &#xAC12;&#xC744; &#xCC38;&#xACE0;&#xD558;&#xC5EC; &#xADF8;&#xB798;&#xD504;&#xB97C; &#xADF8;&#xB9AC;&#xBA74; &#xB2E4;&#xC74C;&#xACFC; &#xAC19;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_mark_ellipse<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ ylab<span class="token punctuation">(</span><span class="token string">&quot;PC2 (8.13 %)&quot;</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ xlab<span class="token punctuation">(</span><span class="token string">&quot;PC1 (84.22 %)&quot;</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ theme_classic<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># &#xD558;&#xC580;&#xBC14;&#xD0D5;&#xC774; &#xB418;&#xB294; &#xD074;&#xB798;&#xC2DD;&#xD55C; &#xD14C;&#xB9C8; &#xC801;&#xC6A9;</span>
+</pre><p>&#xADF8;&#xB9AC;&#xACE0; biplot&#xC5D0;&#xC11C; &#xD654;&#xC0B4;&#xD45C;&#xB294; &#xC6D0;&#xB798; &#xBCC0;&#xC218;&#xAC00; &#xD3C9;&#xBA74;&#xC0C1;&#xC5D0; &#xC5B4;&#xB5BB;&#xAC8C; &#xD45C;&#xD604;&#xB418;&#xB294;&#xC9C0;&#xB97C; &#xB73B;&#xD558;&#xB294; &#xAC83;&#xC73C;&#xB85C; &#xCD94;&#xAC00;&#xB97C; &#xD558;&#xBA74; &#xB2E4;&#xC74C;&#xACFC; &#xAC19;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<pre data-role="codeBlock" data-info="r" class="language-r"><span class="token comment">#pca$rotation &#xAC12; &#xCD94;&#xCD9C; &#xD6C4; data.frame &#xC815;&#xB9AC;</span>
+pca_rotation <span class="token operator">&lt;-</span> as.data.frame<span class="token punctuation">(</span>pca<span class="token operator">$</span>rotation<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">]</span>
+pca_rotation<span class="token operator">$</span>name <span class="token operator">&lt;-</span> rownames<span class="token punctuation">(</span>pca_rotation<span class="token punctuation">)</span>
+
+<span class="token comment"># &#xC2DC;&#xAC01;&#xD654;</span>
+ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_mark_ellipse<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_text<span class="token punctuation">(</span>data<span class="token operator">=</span>pca_rotation<span class="token punctuation">,</span> 
+           mapping<span class="token operator">=</span>aes<span class="token punctuation">(</span>label<span class="token operator">=</span>name<span class="token punctuation">,</span>
+                       color<span class="token operator">=</span><span class="token keyword keyword-NULL">NULL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ geom_segment<span class="token punctuation">(</span>data<span class="token operator">=</span>pca_rotation<span class="token punctuation">,</span> 
+              mapping<span class="token operator">=</span>aes<span class="token punctuation">(</span>xend<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> yend<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>
+                          color<span class="token operator">=</span><span class="token keyword keyword-NULL">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> alpha <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">,</span>
+              arrow <span class="token operator">=</span> arrow<span class="token punctuation">(</span>length <span class="token operator">=</span> unit<span class="token punctuation">(</span><span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token string">&quot;cm&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ends<span class="token operator">=</span><span class="token string">&quot;first&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ <span class="token comment">#first &#xB300;&#xC2E0;, last, both &#xC785;&#xB825;&#xC2DC; &#xB05D;, &#xC591;&#xCABD;&#xC5D0; &#xB2EC;&#xB9BC;.</span>
+ ylab<span class="token punctuation">(</span><span class="token string">&quot;PC2 (8.13 %)&quot;</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ xlab<span class="token punctuation">(</span><span class="token string">&quot;PC1 (84.22 %)&quot;</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ theme_classic<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+ coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</pre><p>&#xC774;&#xAC83;&#xC73C;&#xB85C; &#xB370;&#xC774;&#xD130;&#xD504;&#xB808;&#xC784; &#xD578;&#xB4E4;&#xB9C1;&#xD558;&#xACE0;, PCA &#xADF8;&#xB824;&#xBCF4;&#xAE30; &#xB9C8;&#xCE58;&#xACA0;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+<p>&#xC774;&#xD558; &#xC804;&#xCCB4; &#xCF54;&#xB4DC;</p>
+<pre data-role="codeBlock" data-info="r" class="language-r">data <span class="token operator">&lt;-</span> read.csv<span class="token punctuation">(</span><span class="token string">&quot;example_data.csv&quot;</span><span class="token punctuation">)</span>
+
+<span class="token comment">#rowname &#xC815;&#xB9AC;</span>
+rownames<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+sample.group <span class="token operator">&lt;-</span> data<span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span>
+sample.ID <span class="token operator">&lt;-</span> rep<span class="token punctuation">(</span>c<span class="token punctuation">(</span><span class="token string">&quot;_1&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;_2&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;_3&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span>
+
+data.rowname <span class="token operator">&lt;-</span> paste<span class="token punctuation">(</span>sample.group<span class="token punctuation">,</span> sample.ID<span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token string">&quot;&quot;</span><span class="token punctuation">)</span>
+data.rowname
+rownames<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">&lt;-</span> data.rowname
+
+<span class="token comment">#colname &#xC815;&#xB9AC;</span>
+colnames<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+colnames<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">&lt;-</span> c<span class="token punctuation">(</span><span class="token string">&quot;2-methyl-1-butanol&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;1-hexanol&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;2-methylbutyl acetate&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;hexyl acetate&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;hexyl 2-methylbutanoate&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;hexyl hexanoate&quot;</span>
+<span class="token punctuation">)</span>
+
+data2 <span class="token operator">&lt;-</span> data<span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+pca <span class="token operator">&lt;-</span> prcomp<span class="token punctuation">(</span>data2<span class="token punctuation">,</span> scale. <span class="token operator">=</span> T<span class="token punctuation">)</span>
+pca
+
+biplot<span class="token punctuation">(</span>pca<span class="token punctuation">)</span>
+
+pca_x <span class="token operator">&lt;-</span> as.data.frame<span class="token punctuation">(</span>pca<span class="token operator">$</span>x<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">]</span>
+
+pca_x<span class="token operator">$</span>group <span class="token operator">&lt;-</span> gsub<span class="token punctuation">(</span><span class="token string">&quot;_[123]$&quot;</span> <span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span> rownames<span class="token punctuation">(</span>pca_x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+pca_x<span class="token operator">$</span>group
+
+library<span class="token punctuation">(</span>ggplot2<span class="token punctuation">)</span>
+library<span class="token punctuation">(</span>ggforce<span class="token punctuation">)</span>
+ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># &#xAC01; &#xC8FC;&#xC131;&#xBD84;&#xC5D0; &#xB300;&#xD55C; explained variance (eigen centrality)&#xB97C; &#xACC4;&#xC0B0;&#xD569;&#xB2C8;&#xB2E4;</span>
+explained_variance_ratio <span class="token operator">&lt;-</span> pca<span class="token operator">$</span>sdev<span class="token operator">^</span><span class="token number">2</span> <span class="token operator">/</span> sum<span class="token punctuation">(</span>pca<span class="token operator">$</span>sdev<span class="token operator">^</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+<span class="token comment"># &#xCCAB; &#xB450; &#xC8FC;&#xC131;&#xBD84;&#xC5D0; &#xB300;&#xD55C; explained variance&#xB97C; &#xD37C;&#xC13C;&#xD2B8;&#xB85C; &#xD45C;&#xC2DC;&#xD569;&#xB2C8;&#xB2E4;</span>
+explained_variance_percent <span class="token operator">&lt;-</span> explained_variance_ratio <span class="token operator">*</span> <span class="token number">100</span>
+explained_variance_percent<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">]</span>
+
+pca_rotation <span class="token operator">&lt;-</span> as.data.frame<span class="token punctuation">(</span>pca<span class="token operator">$</span>rotation<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">]</span>
+pca_rotation<span class="token operator">$</span>name <span class="token operator">&lt;-</span> rownames<span class="token punctuation">(</span>pca_rotation<span class="token punctuation">)</span>
+
+ggplot<span class="token punctuation">(</span>data <span class="token operator">=</span> pca_x<span class="token punctuation">,</span> aes<span class="token punctuation">(</span>x<span class="token operator">=</span>PC1<span class="token punctuation">,</span> y<span class="token operator">=</span>PC2<span class="token punctuation">,</span> color <span class="token operator">=</span> group<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  geom_point<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  coord_fix<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  geom_mark_ellipse<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  geom_text<span class="token punctuation">(</span>data<span class="token operator">=</span>pca_rotation<span class="token punctuation">,</span> 
+            mapping<span class="token operator">=</span>aes<span class="token punctuation">(</span>label<span class="token operator">=</span>name<span class="token punctuation">,</span>
+                        color<span class="token operator">=</span><span class="token keyword keyword-NULL">NULL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+  geom_segment<span class="token punctuation">(</span>data<span class="token operator">=</span>pca_rotation<span class="token punctuation">,</span> 
+               mapping<span class="token operator">=</span>aes<span class="token punctuation">(</span>xend<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> yend<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>
+                           color<span class="token operator">=</span><span class="token keyword keyword-NULL">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> alpha <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">,</span>
+               arrow <span class="token operator">=</span> arrow<span class="token punctuation">(</span>length <span class="token operator">=</span> unit<span class="token punctuation">(</span><span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token string">&quot;cm&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ends<span class="token operator">=</span><span class="token string">&quot;first&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span>
+<span class="token comment">#first &#xB300;&#xC2E0;, last, both &#xC785;&#xB825;&#xC2DC; &#xB05D;, &#xC591;&#xCABD;&#xC5D0; &#xB2EC;&#xB9BC;.</span>
+ylab<span class="token punctuation">(</span><span class="token string">&quot;PC2 (8.13 %)&quot;</span><span class="token punctuation">)</span><span class="token operator">+</span>
+xlab<span class="token punctuation">(</span><span class="token string">&quot;PC1 (84.22 %)&quot;</span><span class="token punctuation">)</span><span class="token operator">+</span>
+theme_classic<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</pre><hr>
+
       </div>
       
       
