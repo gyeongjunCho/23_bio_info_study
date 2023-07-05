@@ -1806,6 +1806,7 @@ install.packages("ggforce")
  각 그룹의 갯수가 작아서 계산이 되질 않아 다른 방법을 사용했습니다.
  
  ```r
+ library(ggforce)
  ggplot(data = pca_x, aes(x=PC1, y=PC2, color = group))+
   geom_point()+
   coord_fix()+
