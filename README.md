@@ -1733,7 +1733,8 @@ install.packages("ggforce")
 
  #colname 정리
  colnames(data)
- colnames(data) <- c("2-methyl-1-butanol",
+ colnames(data) <- c("label",
+                     "2-methyl-1-butanol",
                      "1-hexanol",
                      "2-methylbutyl acetate",
                      "hexyl acetate",
