@@ -1937,4 +1937,766 @@ install.packages("ggforce")
  theme_classic()
  ```
 
------
+
+------
+
+### 11월 2주차: (복습)data.frame 다루고 그래프 그리기 (세균 유전체 지도)
+
+
+이번에 그려볼 것은 세균 유전체 지도 입니다.
+
+논문에 Figure로 나와있는 세균 유전자 지도 원그래프를 생각해 보면, 맨바깥에 세균 유전체 길이를 나타낼수 있는 눈금이 있고, 안쪽에 +Strand와 -Strand 상에 있는 Coding sequence (CDS), mRNA, tRNA 등의 유전자 위치 정보와 염기서열의 GC 비율에 관한 정보가 주로 표시 되는걸 알수 있습니다.
+
+그러므로 필요한 raw data 하나는 염기서열 fasta 파일과, 유전자 위치정보가 담기는 gff 파일이 필요합니다. gff파일을 메모장으로 열어보면 tab seperated value (TSV)파일로 이 강의에서 주로 다뤘던 csv의 **comma(,)** 대신 **tab**으로 분리되어 표처럼 값이 나열된 파일입니다. 즉 데이터 프레임으로 바꾸기 쉬운 구조라는 거죠.
+
+한번에 다 못하면 몇번에 걸쳐서 진행하겠습니다. (ggplot만 약 150줄...)
+
+우선 오늘 필요한 패키지부터 불러옵시다.
+``` r
+library(stringr)
+library(seqinr)
+library(tidyverse)
+```
+
+#### gff 파일 불러오고 정리하기
+
+TSV파일은 R에서 `read.delim`으로 불러 올수 있습니다.
+
+``` r
+gff <- read.delim("R2A-15.gff", header = F)
+head(gff)
+```
+
+<br>
+
+그 다음 gff형식임을 나타내는 1,2번 row을 날리고 필요한 column만 추출합시다.
+
+``` r
+gff_contigs <- gff[-1:-2, c(1, 3:5, 7)]
+head(gff_contigs)
+```
+
+<br>
+
+Column이름도 자료 내용에 맞춰서 정리해 줍시다.
+
+``` r
+colnames(gff_contigs) <- c("contigs", 
+                           "category",
+                           "start",
+                           "end",
+                           "direction") 
+
+head(gff_contigs) # 확인
+```
+
+gff 파일 편집은 이걸로 끝났습니다.
+
+<br>
+
+<br>
+
+#### fasta 파일 정보 불러오기
+
+`seqinr`패키지가 있으면 `read.fasta`라는 함수로 fasta 파일을 불러 올 수 있습니다.
+
+``` r
+wgn <- read.fasta("R2A-15.fasta") # fasta를 list 구조로 불러옴
+
+# list 안 벡터 구조로 들어있는 염기서열을 하나로 붙임
+seq <- paste0(unlist(wgn), collapse = "") 
+seq
+```
+
+#### 염기서열 길이 측정하기
+
+`nchar`함수로 염기서열 길이를 측정합니다.
+
+``` r
+seq_length <- nchar(seq)
+seq_length
+```
+
+#### GC 비율 확인하기
+
+GCratio 계산 함수를 우선 만들어 줍니다.
+
+``` r
+gc_ratio <- function(x){
+  x <- toupper(x) # 모든 문자 강제로 대문자화
+  A <- nchar(gsub("[AT]", "", x)) # gsub으로 AT 삭제 후 문자수 체크
+  B <- nchar(x) # 전체 문자수 체크
+  return(A/B) # A/B로 GC content 계산
+}
+```
+
+<br>
+
+만든 함수로 전체 GC 비율을 구합니다.
+``` r
+seq_gc_ratio <- gc_ratio(seq)
+seq_gc_ratio
+```
+
+<br>
+
+100을 곱해서 반올림하고 %문자를 붙여서 라벨용으로도 하나 만들어 둡니다.
+``` r
+gc_ratio_label <- 
+      paste0(format(round(seq_gc_ratio*100, 2), nsmall=2), "%")
+gc_ratio_label
+```
+
+<br>
+
+#### 10kbp 단위로 쪼개기
+
+유전체 맵 거의 가운데쯤 위치한 GC 바그래프를 보면 부분적으로 계산하여 그립니다. 
+그걸 위해서 우선 길이를 계산해 볼까요?
+``` r
+separated_seq <- seq(1, nchar(seq), 10000)
+separated_seq
+```
+
+<br>
+
+separated_seq을 보면 10000bp 단위로 1, 10001, 20001 ... 순서로 숫자가 정리되었습니다. 이걸 문자 시작점이라 보고 끝점을 계산해 보면 다음과 같이 나타낼수 있어요.
+``` r
+separated_seq_end <- c(separated_seq[-1] - 1, seq_length)
+```
+<br>
+
+10000, 20000, 30000 ... 이런식으로 숫자가 정리됩니다.
+그러므로 1~10000, 10001~20000, 20001~30000 .... 이런식으로 짝지어 지니까 데이터 프레임을 만들수 있습니다.
+
+``` r
+separated_seq_df <- data.frame(start = separated_seq, 
+                               end = separated_seq_end)
+
+head(separated_seq_df)
+```
+
+<br>
+
+그 다음 substr를 사용하여 염기서열 맨 처음(1~10000)만 쪼개어 봅시다.
+``` r
+contigs_10k <- 
+     substr(seq,
+         separated_seq_df[1, "start"], # 1번열의 "start" column
+         separated_seq_df[1, "end"]) # 1번열의 "end" column
+
+contigs_10k
+```
+
+딱 1~10000개의 문자가 출력됩니다.
+이걸 반복문으로 2번부터 반복되게 진행합니다.
+
+``` r
+for (i in 2:nrow(separated_seq_df)) {
+  #벡터 구조로 값을 축적
+    contigs_10k <- c(contigs_10k, 
+                     substr(seq,
+                            separated_seq_df[i, "start"],
+                            separated_seq_df[i, "end"]))
+}
+
+length(contigs_10k) # 예제 파일로 진행시 503이 뜸
+```
+한번에 잘 따라하셨으면 503이 뜰껍니다. 다른 숫자가 뜨면 맨처음 쪼갠거 부터 다시 시도하세요.
+
+<br>
+
+#### 10kbp 쪼갠 것의 GC content 구하기
+
+쪼갠 글자를 얻었으니 이걸 하나하나 집어넣어서 gc_ratio를 각자 구합니다.
+반복문을 사용하면 좀 복잡하나, i가 1일때, 2일때, 3일때... 503일때를 하나하나 순서상으로 vector 구조로 쌓는 방법입니다.
+``` r
+for(i in 1:length(contigs_10k)) {
+  if (i == 1) {
+    gc_ratio_contigs_10k_res <- gc_ratio(contigs_10k[i])
+  } else {
+    gc_ratio_contigs_10k_res <-
+      c(gc_ratio_contigs_10k_res, gc_ratio(contigs_10k[i]))
+  }
+}
+
+gc_ratio_contigs_10k_res
+```
+
+<br>
+
+><center> 심화 코드 </center>
+>  
+> 반복문의 상위개념인 벡터라이제이션 기법을 사용하면 아래 코드로도 나타낼수 있습니다.
+> ``` r
+> gc_ratio_contigs_10k_res <- vapply(contigs_10k, gc_ratio, double(1))
+> 
+> # 벡터 이름 삭제, 안해도 상관없음
+> names(gc_ratio_contigs_10k_res) <- NULL 
+>
+> gc_ratio_contigs_10k_res
+> ``` 
+> 벡터라이제이션 함수는 상황에 따라 다른데 `vapply`, `lapply`, `sapply` 등이 있습니다. 반복문보다 간결하고 속도도 훨씬 빠르지만, 코드가 반복문보다 추상적이고 출력 구조를 정확하게 명시해야 하는 어려움이 있어 익히는데 시간이 더 걸립니다.
+
+<br>
+
+마지막으로 각 10kbp씩 구한 GC 비율을 dataframe에 통합시켜 줍니다.
+``` r
+separated_seq_df$gc_ratio <- gc_ratio_contigs_10k_res
+separated_seq_df
+```
+
+<br>
+
+#### 눈금용으로 25kbp로 쪼개기
+원형 축을 표시하는 기능이 ggplot2에서는 글자가 가로로 밖에 없어서 수동으로 원의 각도에 따라 회전하여 배치되는 코드를 만들었습니다. 그것을 위한 첫 단게로 눈금용으로 25kbp로 쪼개줍니다. 이전의 10kbp로 쪼개는 것과 똑같은 코드입니다.
+
+``` r
+separated_seq2  <- seq(1,nchar(seq), 250000)
+separated_seq_df2  <- data.frame(start = separated_seq2,
+                           end = c(separated_seq2[-1]-1, nchar(seq))
+)
+
+separated_seq_df2
+```
+
+<br>
+
+#### 눈금용 25kbp data.frame에 문자열과 각도값 계산하기
+
+<br>
+
+라벨용 문자열을 **Mbp** 단위로 나타내기 위하여 1000000으로 나누고 반올림함수`round`로 정리합니다.
+
+``` r
+separated_seq_df2$label <- round(separated_seq_df2$end/1000000, 1)
+```
+
+<br>
+
+그 다음 문자열을 붙여서 완성합니다.
+
+``` r
+separated_seq_df2$label <- paste(separated_seq_df2$label, "Mbp")
+```
+
+<br>
+
+그리고 나중에 동그랗게 말꺼니까 맨 끝에 0Mbp도 추가해 줍니다.
+
+``` r
+separated_seq_df2$label[nrow(separated_seq_df2)] <- 
+    paste("0 /", separated_seq_df2$label[nrow(separated_seq_df2)])
+```
+
+<br>
+ggplot에서는 360도로 각도를 나타네는데 수학적인것은 머리가 아프니까 설명은 생략하겠습니다. 
+
+``` r
+separated_seq_df2$angle <- 90 - 360*(separated_seq_df2$end)/max(separated_seq_df2$end)
+
+# 각도에 따라 우측정렬 좌측정렬 정리
+separated_seq_df2$hjust <- ifelse(separated_seq_df2$angle < -90, 1, 0)
+```
+
+#### 그래프 그리기
+모든 재료는 끝났습니다. 카카오톡에 올린것 처럼 상상하기 힘든 둥근형태의 그래프 말고 x축 y축으로 그래프를 하나하나 그린뒤 `coord_polar`로 그래프를 말아주면 됩니다.
+
+``` r
+#gc_ratio y축 옮기는 상수
+gc_con <- 0.45 - seq_gc_ratio
+gc_con
+
+ggplot() +
+
+  #x축 선 그리기
+  annotate(
+    geom = "segment",
+    x = 1,
+    xend = nchar(seq),
+    y = 1.0,
+    yend = 1.0,
+    size = 1,
+    color = "grey20"
+  ) +
+
+  #x축 눈금 그리기
+  geom_segment(data = separated_seq_df2, aes(
+    x = end,
+    xend = end,
+    y = 1.1,
+    yend = 1.0
+  )) +
+
+  # x축 라벨적고 각도 적용하기
+  geom_text(
+    data = separated_seq_df2,
+    aes(
+      x = end,
+      y = 1.21,
+      label = label,
+      angle = angle
+    ),
+    hjust = 0,
+    inherit.aes = FALSE
+  ) +
+
+  # +Strand CDS 그리기
+  geom_segment(
+    data = subset(gff_contigs, direction == "+" & category == "CDS"),
+    aes(
+      x = start,
+      xend = end,
+      y = 0.8,
+      yend = 0.8,
+      color = category
+    ),
+    size = 7
+  ) +
+
+  # -Strand CDS 그리기
+  geom_segment(
+    data = subset(gff_contigs, direction == "-" & category == "CDS"),
+    aes(
+      x = start,
+      xend = end,
+      y = 0.65,
+      yend = 0.65,
+      color = category
+    ),
+    size = 7
+  ) +
+
+  # + Strand RNA 그리기
+  geom_point(
+    data = subset(gff_contigs, direction == "+" & category != "CDS"),
+    aes(x = start, y = 0.8, color = category),
+    size = 1.5,
+    alpha = 0.7,
+    shape = 1,
+    stroke = 1,
+    position = position_jitterdodge(jitter.height = 0.05)
+  ) +
+
+  # - Strand RNA 그리기
+  geom_point(
+    data = subset(gff_contigs, direction == "-" & category != "CDS"),
+    aes(x = start, y = 0.65, color = category),
+    size = 1.5,
+    alpha = 0.7,
+    shape = 1,
+    stroke = 1,
+    position = position_jitterdodge(jitter.height = 0.05)
+  ) +
+
+  # 배경테마를 아예 제거하기
+  theme_void() +
+
+  # y축 범위를 조절해서 중앙 공간 확보하기
+  ylim(-0.22, 1.21) +
+
+  # GC content 바그래프 그리기
+  geom_rect(
+    data = separated_seq_df,
+    aes(
+      xmin = start,
+      xmax = end,
+      ymin = seq_gc_ratio + gc_con,
+      ymax = gc_ratio + gc_con,
+      fill = ifelse(
+        seq_gc_ratio > gc_ratio_contigs_10k_res,
+        paste0(gc_ratio_label, " or more"),
+        paste0(gc_ratio_label, " or less")
+      )
+    )
+  ) +
+  
+  #색깔축 세부조정, 색깔 지정하기
+  scale_color_manual(values = c("grey80", "#A0D568", "#4FC1E8", "#AC92EB")) +
+
+  #채우는 색깔축 세부조정, 색깔 지정하기
+  scale_fill_manual(values = c("#ED5564", "#FFCE54")) +
+
+  #중앙 레전드 조절 1
+  labs(
+    fill = paste0(
+      "GC content per 10kbp\n(average = ",
+      gc_ratio_label,
+      ")\n"
+    ),
+    color = NULL
+  ) +
+  
+  #중앙 레전드 조절 2
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 1.2,
+    label = "scale",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+
+  #원의 정보 서술 1
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 0.91,
+    label = "+ strand",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+
+  #원의 정보 서술 2
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 0.725,
+    label = "- strand",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+
+  #원의 정보 서술 3
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 0.55,
+    label = "GC content",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+
+  # 중앙 레전드 색깔 및 형태 강제 변환
+  guides(color = guide_legend(
+    override.aes =
+      list(
+        size = 4,
+        shape = c(108, 1, 1, 1),
+        fill = "white",
+        linetype = "blank"
+      ),
+    order = 1
+  ))  +
+
+  # 중앙 레전드 배열 조절
+  theme(
+    legend.position = c(0.5, 0.45),
+    legend.box = "horizontal",
+    legend.title = element_text(vjust = -2)
+  )  +
+  
+  # 중앙 레전드에 균 이름 추가
+  annotate(
+    geom = "text",
+    x = 0,
+    y = 0.1,
+    label = "R2A\nchromosome", # 여기서 \n은 'new line' 즉 엔터를 의미
+    size = 8,
+    fontface = "bold"
+  )+
+
+  # 그래프 원형으로 나타내기
+  coord_polar()
+```
+
+혹시 필요하실 분들을 위해 처음부터 끝까지 쭉 적은 코드 첨부하고 마치겠습니다.
+
+``` r
+library(stringr)
+library(seqinr)
+library(tidyverse)
+
+# gff 파일 정리
+gff <- read.delim("R2A-15.gff", header = F)
+head(gff)
+
+gff_contigs <- gff[-1:-2, c(1, 3:5, 7)] #gff 파일에서 필요한 column만 추출
+head(gff_contigs)
+
+colnames(gff_contigs) <- c("contigs", "category", "start", "end", "direction") 
+
+head(gff_contigs) # 확인
+
+
+# 염기서열 정리
+wgn <- read.fasta("R2A-15.fasta")
+seq <- paste0(unlist(wgn), collapse = "")
+seq
+wgn
+# 염색체 길이 확인
+seq_length <- nchar(seq)
+seq_length
+
+# GC contents 계산
+
+gc_ratio <- function(x){
+  x <- toupper(x)
+  A <- nchar(gsub("[AT]", "", x))
+  B <- nchar(x)
+  return(A/B)
+}
+
+seq_gc_ratio <- gc_ratio(seq)
+seq_gc_ratio
+
+#gc_ratio label
+gc_ratio_label <- paste0(format(round(seq_gc_ratio*100, 2), nsmall=2), "%")
+gc_ratio_label
+
+
+# chromsome 서열 10kb 단위로 쪼개기
+separated_seq <- seq(1, nchar(seq), 10000)
+separated_seq
+separated_seq_end <- c(separated_seq[-1] - 1, seq_length)
+
+separated_seq_df <- data.frame(start = separated_seq, 
+                               end = separated_seq_end)
+head(separated_seq_df)
+
+contigs_10k <- substr(seq,
+                      separated_seq_df[1, "start"],
+                      separated_seq_df[1, "end"])
+
+contigs_10k
+
+for (i in 2:nrow(separated_seq_df)) {
+    contigs_10k <- c(contigs_10k,
+                     substr(seq,
+                            separated_seq_df[i, "start"],
+                            separated_seq_df[i, "end"]))
+}
+
+length(contigs_10k)
+
+
+for(i in 1:length(contigs_10k)) {
+  if (i == 1) {
+    gc_ratio_contigs_10k_res <- gc_ratio(contigs_10k[i])
+  } else {
+    gc_ratio_contigs_10k_res <-
+      c(gc_ratio_contigs_10k_res, gc_ratio(contigs_10k[i]))
+  }
+}
+
+gc_ratio_contigs_10k_res
+
+# 심화버젼 코드(벡터라이제이션션)
+# gc_ratio_contigs_10k_res <- vapply(contigs_10k, gc_ratio, double(1))
+# names(gc_ratio_contigs_10k_res) <- NULL 
+
+separated_seq_df$gc_ratio <- gc_ratio_contigs_10k_res
+separated_seq_df
+
+#염기서열 길이 표시 눈금
+separated_seq2  <- seq(1,nchar(seq), 250000)
+separated_seq_df2  <- data.frame(start = separated_seq2,
+                           end = c(separated_seq2[-1]-1, nchar(seq))
+)
+
+separated_seq_df2
+
+separated_seq_df2$label <- round(separated_seq_df2$end/1000000, 1)
+separated_seq_df2$label <- paste(separated_seq_df2$label, "Mbp")
+separated_seq_df2$label[nrow(separated_seq_df2)] <- paste("0 /", separated_seq_df2$label[nrow(separated_seq_df2)])
+rownames(contigs_sep2)
+separated_seq_df2$angle <- 90 - 360*(separated_seq_df2$end)/max(separated_seq_df2$end)
+separated_seq_df2$hjust <- ifelse(separated_seq_df2$angle < -90, 1, 0)
+
+#gc_ratio y축 옮기는 상수
+gc_con <- 0.45 - seq_gc_ratio
+gc_con
+
+ggplot() +
+  
+  #x축 선 그리기
+  annotate(
+    geom = "segment",
+    x = 1,
+    xend = nchar(seq),
+    y = 1.0,
+    yend = 1.0,
+    size = 1,
+    color = "grey20"
+  ) +
+  
+  #x축 눈금 그리기
+  geom_segment(data = separated_seq_df2, aes(
+    x = end,
+    xend = end,
+    y = 1.1,
+    yend = 1.0
+  )) +
+  
+  # x축 라벨적고 각도 적용하기
+  geom_text(
+    data = separated_seq_df2,
+    aes(
+      x = end,
+      y = 1.21,
+      label = label,
+      angle = angle
+    ),
+    hjust = 0,
+    inherit.aes = FALSE
+  ) +
+  
+  # +Strand CDS 그리기
+  geom_segment(
+    data = subset(gff_contigs, direction == "+" & category == "CDS"),
+    aes(
+      x = start,
+      xend = end,
+      y = 0.8,
+      yend = 0.8,
+      color = category
+    ),
+    size = 7
+  ) +
+  
+  # -Strand CDS 그리기
+  geom_segment(
+    data = subset(gff_contigs, direction == "-" & category == "CDS"),
+    aes(
+      x = start,
+      xend = end,
+      y = 0.65,
+      yend = 0.65,
+      color = category
+    ),
+    size = 7
+  ) +
+  
+  # + Strand RNA 그리기
+  geom_point(
+    data = subset(gff_contigs, direction == "+" & category != "CDS"),
+    aes(x = start, y = 0.8, color = category),
+    size = 1.5,
+    alpha = 0.7,
+    shape = 1,
+    stroke = 1,
+    position = position_jitterdodge(jitter.height = 0.05)
+  ) +
+  
+  # - Strand RNA 그리기
+  geom_point(
+    data = subset(gff_contigs, direction == "-" & category != "CDS"),
+    aes(x = start, y = 0.65, color = category),
+    size = 1.5,
+    alpha = 0.7,
+    shape = 1,
+    stroke = 1,
+    position = position_jitterdodge(jitter.height = 0.05)
+  ) +
+  
+  # 배경테마를 아예 제거하기
+  theme_void() +
+  
+  # y축 범위를 조절해서 중앙 공간 확보하기
+  ylim(-0.22, 1.21) +
+  
+  # GC content 바그래프 그리기
+  geom_rect(
+    data = separated_seq_df,
+    aes(
+      xmin = start,
+      xmax = end,
+      ymin = seq_gc_ratio + gc_con,
+      ymax = gc_ratio + gc_con,
+      fill = ifelse(
+        seq_gc_ratio > gc_ratio_contigs_10k_res,
+        paste0(gc_ratio_label, " or more"),
+        paste0(gc_ratio_label, " or less")
+      )
+    )
+  ) +
+  
+  #색깔축 세부조정, 색깔 지정하기
+  scale_color_manual(values = c("grey80", "#A0D568", "#4FC1E8", "#AC92EB")) +
+  
+  #채우는 색깔축 세부조정, 색깔 지정하기
+  scale_fill_manual(values = c("#ED5564", "#FFCE54")) +
+  
+  #중앙 레전드 조절 1
+  labs(
+    fill = paste0(
+      "GC content per 10kbp\n(average = ",
+      gc_ratio_label,
+      ")\n"
+    ),
+    color = NULL
+  ) +
+  
+  #중앙 레전드 조절 2
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 1.2,
+    label = "scale",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+  
+  #원의 정보 서술 1
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 0.91,
+    label = "+ strand",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+  
+  #원의 정보 서술 2
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 0.725,
+    label = "- strand",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+  
+  #원의 정보 서술 3
+  annotate(
+    geom = "text",
+    x = nchar(seq) * 12 / 360,
+    y = 0.55,
+    label = "GC content",
+    hjust = 1,
+    fontface = "bold"
+  ) +
+  
+  # 중앙 레전드 색깔 및 형태 강제 변환
+  guides(color = guide_legend(
+    override.aes =
+      list(
+        size = 4,
+        shape = c(108, 1, 1, 1),
+        fill = "white",
+        linetype = "blank"
+      ),
+    order = 1
+  ))  +
+  
+  # 중앙 레전드 배열 조절
+  theme(
+    legend.position = c(0.5, 0.45),
+    legend.box = "horizontal",
+    legend.title = element_text(vjust = -2)
+  )  +
+  
+  # 중앙 레전드에 균 이름 추가
+  annotate(
+    geom = "text",
+    x = 0,
+    y = 0.1,
+    label = "R2A\nchromosome",
+    size = 8,
+    fontface = "bold"
+  )+
+  
+  # 그래프 원형으로 나타내기
+  coord_polar()
+
+```
