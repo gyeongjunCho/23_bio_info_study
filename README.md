@@ -2502,7 +2502,6 @@ separated_seq_df2
 separated_seq_df2$label <- round(separated_seq_df2$end/1000000, 1)
 separated_seq_df2$label <- paste(separated_seq_df2$label, "Mbp")
 separated_seq_df2$label[nrow(separated_seq_df2)] <- paste("0 /", separated_seq_df2$label[nrow(separated_seq_df2)])
-rownames(contigs_sep2)
 separated_seq_df2$angle <- 90 - 360*(separated_seq_df2$end)/max(separated_seq_df2$end)
 separated_seq_df2$hjust <- ifelse(separated_seq_df2$angle < -90, 1, 0)
 
